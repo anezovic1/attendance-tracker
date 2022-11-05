@@ -61,3 +61,10 @@ header li {
 .izborni {
     background-color: powderblue;
 }
+
+img {
+    width: 89px;
+    height: 50px;
+    object-fit: contain;
+    border: solid blueviolet;
+}
