@@ -68,3 +68,13 @@ img {
     object-fit: contain;
     border: solid blueviolet;
 }
+
+h3 {
+    font-size: 40px;
+    color: rgb(56, 56, 218);
+}
+
+h4 {
+    font-size: 25px;
+    color: rgb(124, 124, 220);
+}
