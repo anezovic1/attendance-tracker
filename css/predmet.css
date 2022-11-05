@@ -2,10 +2,16 @@ body {
     background-color: rgb(181, 181, 241);
 }
 
+html {
+    scroll-padding: 10rem;
+}
+
 header {
     background-color:rgb(124, 124, 220);
     position: fixed;
     top: 0px;
+    left: 0px;
+    right: 0px;
     z-index: 100;
 }
 
