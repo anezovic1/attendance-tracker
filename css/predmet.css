@@ -1,0 +1,34 @@
+header {
+    background-color:rgb(124, 124, 220);
+    position: fixed;
+    top: 0px;
+}
+
+a {
+    color: powderblue;
+}
+
+header ul {
+    margin-left: 50px;
+    margin-right: 50px;
+    padding-left: 50px;
+    padding-right: 30px;
+    display: inline-block;
+    vertical-align: top;
+    list-style-type: none;
+    font-family:Verdana, Geneva, Tahoma, sans-serif;
+}
+
+
+header li {
+    padding-left: 35px;
+}
+
+#glavni {
+    position: absolute;
+    top: 70px;
+}
+
+div {
+    font-size: 30px;
+}
