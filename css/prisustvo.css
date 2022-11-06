@@ -1,4 +1,4 @@
-#osnovneInfo td, th {
+#osnovneInfo td, #osnovneInfo th {
     column-width: 200px;
     text-align: left;
 }
@@ -10,14 +10,62 @@
     margin-bottom: 20px;
 }
 
-#glavnaTabela {
+#mainTable {
     margin-top: 50px;
-    margin-left: 10px;
+    margin-left: 100px;
     border: 2px solid black;
     border-collapse: collapse;
+    font-size: 12px;
+    text-align:center;
 }
 
-#glavnaTabela tr, #glavnaTabela td, #glavnaTabela th {
+#mainTable tr, #mainTable td, #mainTable th {
     border: 2px solid black;
-    
+}
+
+#mainTable td, #mainTable th {
+    height: 40px;
+}
+
+.firstRow {
+    font-size: 15px;
+    text-align:left;
+    height: 55px;
+}
+
+.firstColumn, .secondColumn, .lastColumn, .mainColumn {
+    padding-left: 10px;
+}
+.firstColumn {
+    font-size: 15px;
+    column-width: 20px;
+}
+
+.secondColumn {
+    column-width: 55px;
+}
+
+.lastColumn {
+    column-width: 250px;
+}
+
+.week {
+    column-width: 45px;
+    padding-left: 10px;
+}
+
+.insideColumn {
+    column-width: 25px;
+}
+
+.upper {
+    padding-bottom: 60px;
+}
+
+.green {
+    background-color: greenyellow;
+}
+
+.red {
+    background-color: red
 }
