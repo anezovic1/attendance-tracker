@@ -1,0 +1,23 @@
+#osnovneInfo td, th {
+    column-width: 200px;
+    text-align: left;
+}
+
+.pocetak {
+    font-size: 20px;
+    margin-left: 100px;
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+
+#glavnaTabela {
+    margin-top: 50px;
+    margin-left: 10px;
+    border: 2px solid black;
+    border-collapse: collapse;
+}
+
+#glavnaTabela tr, #glavnaTabela td, #glavnaTabela th {
+    border: 2px solid black;
+    
+}
