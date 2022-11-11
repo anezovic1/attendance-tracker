@@ -1,3 +1,9 @@
+body {           
+    overflow-x: scroll;
+    overflow-y: hidden;
+    white-space: nowrap;
+}
+
 #osnovneInfo td, #osnovneInfo th {
     column-width: 200px;
     text-align: left;
@@ -11,12 +17,14 @@
 }
 
 #mainTable {
+    table-layout: fixed;
     margin-top: 50px;
     margin-left: 100px;
     border: 2px solid black;
     border-collapse: collapse;
     font-size: 12px;
     text-align:center;
+    width: max-content;
 }
 
 #mainTable tr, #mainTable td, #mainTable th {
@@ -29,16 +37,16 @@
 
 .firstRow {
     font-size: 15px;
-    text-align:left;
+    text-align: left;
     height: 55px;
 }
 
 .firstColumn, .secondColumn, .lastColumn, .mainColumn {
     padding-left: 10px;
 }
+
 .firstColumn {
     font-size: 15px;
-    column-width: 20px;
 }
 
 .secondColumn {
@@ -69,3 +77,4 @@
 .red {
     background-color: red
 }
+
