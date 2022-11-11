@@ -9,6 +9,7 @@ html {
 .prvi {
     margin-left: -20px;
 }
+
 header {
     background-color:rgb(124, 124, 220);
     position: fixed;
@@ -34,7 +35,7 @@ header li {
     padding-left: 35px;
 }
 
-@media(max-width:538px) {
+@media(max-width:555px) { /*538px*/
     header {
         position: absolute;
         top: 0px;
@@ -64,7 +65,7 @@ header li {
     }
 }
 
-@media screen and (min-width:538px) and (max-width: 800px){ 
+@media screen and (min-width:555px) and (max-width: 800px){ /* 538 800*/
     header ul {
         font-size: 6px;
         display:inline-block;
