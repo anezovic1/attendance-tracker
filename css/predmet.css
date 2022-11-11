@@ -35,7 +35,7 @@ header li {
     padding-left: 35px;
 }
 
-@media(max-width:555px) { /*538px*/
+@media(max-width:555px) { 
     header {
         position: absolute;
         top: 0px;
@@ -65,7 +65,7 @@ header li {
     }
 }
 
-@media screen and (min-width:555px) and (max-width: 800px){ /* 538 800*/
+@media screen and (min-width:555px) and (max-width: 800px){ 
     header ul {
         font-size: 6px;
         display:inline-block;
