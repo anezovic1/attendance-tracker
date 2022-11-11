@@ -6,6 +6,9 @@ html {
     scroll-padding: 7rem;
 }
 
+.prvi {
+    margin-left: -20px;
+}
 header {
     background-color:rgb(124, 124, 220);
     position: fixed;
@@ -20,10 +23,6 @@ a {
 }
 
 header ul {
-    /*margin-left: 20px;
-    margin-right: 20px;
-    padding-left: 20px;
-    padding-right: 30px;*/
     display: inline-block;
     vertical-align: top;
     list-style-type: none;
@@ -35,7 +34,7 @@ header li {
     padding-left: 35px;
 }
 
-@media(max-width:500px) {
+@media(max-width:538px) {
     header {
         position: absolute;
         top: 0px;
@@ -65,56 +64,32 @@ header li {
     }
 }
 
-@media screen and (min-width:501px) and (max-width: 800px){ 
-    header {
-        position: fixed;
-        top: 5px;
-        left: 0px;
-        right: 0px;
-        z-index: 100;
-    }
+@media screen and (min-width:538px) and (max-width: 800px){ 
     header ul {
-        font-size: 5px;
+        font-size: 6px;
         display:inline-block;
         vertical-align: top;
         list-style-type: none;
         font-family: Verdana, Geneva, Tahoma, sans-serif;
     }
-    /*#glavni {
-        position: absolute;
-        top: -50px;
-        left: 50px;
-    }*/
     #glavni h3 {
-        font-size: 20px;
-        font-family: Verdana, Geneva, Tahoma, sans-serif;
-        color: rgb(56, 56, 218);
+        font-size: 20px;  
     }
     #glavni h4 {
         font-size: 15px;
-        font-family: Verdana, Geneva, Tahoma, sans-serif;
-        color: rgb(124, 124, 220);
     }
 }
 
 .container {
     display: grid;
-    /*justify-content: space-evenly;*/
     gap: 10px 10px;
     padding: 10px;
-    /*margin-left: 10px;
-    margin-right: 10px;*/
-    /*grid-template-columns: repeat(auto-fill,220px) minmax(220px, auto);*/
     grid-template-columns: repeat(auto-fit,200px);
-   
-    /*grid-template-rows: minmax(100px,auto);*/
 }
 
 .obavezni, .neIde, .izborni {
-    /*width: 200px;*/
     height: 100px;
     padding: 10px;
-
     font-size: 15px;
     font-family: Verdana, Geneva, Tahoma, sans-serif;
     text-align: center;
