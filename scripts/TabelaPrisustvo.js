@@ -187,7 +187,6 @@ export let TabelaPrisustvo = function(divRef, podaci) {
                             
                             const maliRed = document.createElement("tr");
 
-                            
                             if(l == 0) {
                                 for(let k = 0; k < podaci["brojPredavanjaSedmicno"]; k++) {
                                 
@@ -215,6 +214,15 @@ export let TabelaPrisustvo = function(divRef, podaci) {
                                 red.appendChild(maliRed);
                             }
                             else {
+
+                                var studentUnesen = 0;
+
+                                for(let k = 0; k < brojPrisustva; k++) {
+                                    if(podaci["studenti"][i-1]["index"] == podaci["prisustva"][k]["index"] && podaci["prisustva"][k]["sedmica"] == j) {
+                                        studentUnesen = 1;
+                                    }
+                                }
+
                                 var brojPredavanja = 0;
                                 var brojVjezbi = 0;
 
@@ -224,6 +232,7 @@ export let TabelaPrisustvo = function(divRef, podaci) {
                                         brojVjezbi += podaci["prisustva"][k]["vjezbe"];
                                     }
                                 }
+
                                 
 
                                 for(let k = 0; k < podaci["brojPredavanjaSedmicno"]; k++) {
@@ -234,7 +243,10 @@ export let TabelaPrisustvo = function(divRef, podaci) {
                                     malaKolona.appendChild(textKolone);
                                     malaKolona.style.height = "35px";
                                     
-                                    if(brojPredavanja != 0) {
+                                    if(studentUnesen == 0) {
+                                        malaKolona.style.background = " ";
+                                    }
+                                    else if(brojPredavanja != 0) {
                                         malaKolona.style.background = "green";
                                         brojPredavanja--;
                                     }
@@ -255,7 +267,10 @@ export let TabelaPrisustvo = function(divRef, podaci) {
                                     malaKolona.appendChild(textKolone);
                                     malaKolona.style.height = "35px";
 
-                                    if(brojVjezbi != 0) {
+                                    if(studentUnesen == 0) {
+                                        malaKolona.style.background = " ";
+                                    }
+                                    else if(brojVjezbi != 0) {
                                         malaKolona.style.background = "green";
                                         brojVjezbi--;
                                     }
@@ -269,8 +284,6 @@ export let TabelaPrisustvo = function(divRef, podaci) {
         
                                 red.appendChild(maliRed);
                             }
-                            
-                        
                         }
                     }
                 }
