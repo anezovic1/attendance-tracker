@@ -325,5 +325,9 @@ export let TabelaPrisustvo = function(divRef, podaci) {
         tabela.appendChild(tableBody);
         document.body.appendChild(tabela);
         tabela.style.borderCollapse = "collapse";
+        tabela.style.marginLeft = "50px";
+        tabela.style.marginTop = "50px";
+        tabela.style.fontSize = "12px";
+        tabela.style.textAlign = "center";
     }
 }
