@@ -1,13 +1,251 @@
-export let TabelaPrisustvo = function(divRef, podaci) {
+const tabela = document.createElement("table");
+const tableBody = document.createElement("tbody");
+const sedmica = ["nula", "I", "II", "III", "IV", "V", "VI", "VII", "VIII", "IX", "X", "XI", "XII", "XIII", "XIV", "XV"];
 
-    divRef.innerHTML = ""; /* Brisem prethodni sadrzaj. */
+function crtajTabelu(divRef, podaci, posljednjaSedmica) {
 
-    const tabela = document.createElement("table");
-    const tableBody = document.createElement("tbody");
+    //divRef.innerHTML = ""; /* Brisem prethodni sadrzaj. */
+    tableBody.innerHTML = "";
+
     const brojStudenata = podaci["studenti"].length;
     const brojPrisustva = podaci["prisustva"].length;
 
-    const sedmica = ["nula", "I", "II", "III", "IV", "V", "VI", "VII", "VIII", "IX", "X", "XI", "XII", "XIII", "XIV", "XV"];
+    for (let i = 0; i < brojStudenata + 1; i++) {
+        const red = document.createElement("tr");
+        let textKolone = document.createTextNode(' ');
+
+        for (let j = 0; j < 2; j++) { 
+            if(i == 0) {
+                const kolona = document.createElement("th");
+                
+                if(j == 0) {
+                    textKolone = document.createTextNode('Ime i prezime');
+                }
+                else if(j == 1) {
+                    textKolone = document.createTextNode('Index');
+                }
+                
+                kolona.appendChild(textKolone);
+                kolona.style.width = "65px";
+                kolona.style.borderRight = "1px solid black";
+                red.appendChild(kolona);
+            }
+            else if(i != 0) {
+                if(j == 0) {
+                    const kolona = document.createElement("td");
+                    textKolone = document.createTextNode(podaci["studenti"][i-1]["ime"]);
+                    kolona.appendChild(textKolone);
+                    kolona.style.width = "65px";
+                    kolona.style.borderRight = "1px solid black";
+                    red.appendChild(kolona);
+                }
+                else if(j == 1) {
+                    const kolona = document.createElement("td");
+                    textKolone = document.createTextNode(podaci["studenti"][i-1]["index"]);
+                    kolona.appendChild(textKolone);
+                    kolona.style.width = "65px";
+                    kolona.style.borderRight = "1px solid black";
+                    red.appendChild(kolona);
+                } 
+            }
+        }
+
+        for(let j = 1; j <= posljednjaSedmica; j++) {
+            if(i == 0) {
+                const kolona = document.createElement("th");
+                textKolone = document.createTextNode(sedmica[j]);
+                kolona.appendChild(textKolone);
+                kolona.style.width = "65px";
+                kolona.style.borderRight = "1px solid black";
+                red.appendChild(kolona);
+            }
+            else if(i != 0 ) {
+                if(j != posljednjaSedmica) {
+                    const kolona = document.createElement("td");
+                    var ukupnoPredavanjaIVjezbi = podaci["brojPredavanjaSedmicno"] + podaci["brojVjezbiSedmicno"];
+                    var stvarnoPrisustvo = 0;
+                    
+                    for(let k = 0; k < brojPrisustva; k++) {
+                        if(podaci["studenti"][i-1]["index"] == podaci["prisustva"][k]["index"] && podaci["prisustva"][k]["sedmica"] == j) {
+                            stvarnoPrisustvo = podaci["prisustva"][k]["predavanja"] + podaci["prisustva"][k]["vjezbe"];
+                        }
+                    }
+                    
+                    let ukupno = document.createTextNode((stvarnoPrisustvo / ukupnoPredavanjaIVjezbi)*100 + "%");
+                    
+                    kolona.appendChild(ukupno);
+                    kolona.style.width = "65px";
+                    kolona.style.borderRight = "1px solid black";
+                    red.appendChild(kolona);
+                }
+                else if(j == posljednjaSedmica) {
+                    
+                    for(let l = 0; l < 2; l++) {
+                        
+                        const maliRed = document.createElement("tr");
+
+                        if(l == 0) {
+                            for(let k = 0; k < podaci["brojPredavanjaSedmicno"]; k++) {
+                            
+                                const malaKolona = document.createElement("td");
+                                var pomocna = k+1;
+                                textKolone = document.createTextNode("P" + pomocna);
+                                malaKolona.appendChild(textKolone);
+                                malaKolona.style.height = "35px";
+                                malaKolona.style.borderBottom = "1px solid black";
+                                malaKolona.style.borderRight = "1px solid black";
+                                maliRed.appendChild(malaKolona);
+                            }
+    
+                            for(let k = 0; k < podaci["brojVjezbiSedmicno"]; k++) {
+                                const malaKolona = document.createElement("td");
+                                var pomocna = k+1;
+                                textKolone = document.createTextNode("V" + pomocna);
+                                malaKolona.appendChild(textKolone);
+                                malaKolona.style.height = "35px";
+                                malaKolona.style.borderBottom = "1px solid black";
+                                malaKolona.style.borderRight = "1px solid black";
+                                maliRed.appendChild(malaKolona);
+                            }
+    
+                            red.appendChild(maliRed);
+                        }
+                        else {
+
+                            var studentUnesen = 0;
+
+                            for(let k = 0; k < brojPrisustva; k++) {
+                                if(podaci["studenti"][i-1]["index"] == podaci["prisustva"][k]["index"] && podaci["prisustva"][k]["sedmica"] == j) {
+                                    studentUnesen = 1;
+                                }
+                            }
+
+                            var brojPredavanja = 0;
+                            var brojVjezbi = 0;
+
+                            for(let k = 0; k < brojPrisustva; k++) {
+                                if(podaci["studenti"][i-1]["index"] == podaci["prisustva"][k]["index"] && podaci["prisustva"][k]["sedmica"] == j) {
+                                    brojPredavanja += podaci["prisustva"][k]["predavanja"];
+                                    brojVjezbi += podaci["prisustva"][k]["vjezbe"];
+                                }
+                            }
+
+                            
+
+                            for(let k = 0; k < podaci["brojPredavanjaSedmicno"]; k++) {
+                            
+                                const malaKolona = document.createElement("td");
+                                var pomocna = k+1;
+                                textKolone = document.createTextNode(" ");
+                                malaKolona.appendChild(textKolone);
+                                malaKolona.style.height = "35px";
+                                
+                                if(studentUnesen == 0) {
+                                    malaKolona.style.background = " ";
+                                }
+                                else if(brojPredavanja != 0) {
+                                    malaKolona.style.background = "green";
+                                    brojPredavanja--;
+                                }
+                                else {
+                                    malaKolona.style.background = "red";
+                                }
+
+                                malaKolona.style.borderRight = "1px solid black";
+                                maliRed.style.borderRight = "1px solid black";
+
+                                maliRed.appendChild(malaKolona);
+                            }
+    
+                            for(let k = 0; k < podaci["brojVjezbiSedmicno"]; k++) {
+                                const malaKolona = document.createElement("td");
+                                var pomocna = k+1;
+                                textKolone = document.createTextNode(" ");
+                                malaKolona.appendChild(textKolone);
+                                malaKolona.style.height = "35px";
+
+                                if(studentUnesen == 0) {
+                                    malaKolona.style.background = " ";
+                                }
+                                else if(brojVjezbi != 0) {
+                                    malaKolona.style.background = "green";
+                                    brojVjezbi--;
+                                }
+                                else {
+                                    malaKolona.style.background = "red";
+                                }
+
+                                malaKolona.style.borderRight = "1px solid black";
+                                maliRed.appendChild(malaKolona);
+                            }
+    
+                            red.appendChild(maliRed);
+                        }
+                    }
+                }
+            }
+        }
+
+        
+        if(posljednjaSedmica != 15) {
+            if(i == 0) {
+                const kolona = document.createElement("th");
+                if(posljednjaSedmica + 1 != 15) {
+                    textKolone = document.createTextNode(sedmica[posljednjaSedmica+1] + "-" + sedmica[15]);
+                }
+                else {
+                    textKolone = document.createTextNode(sedmica[15]);
+                }
+                
+                kolona.appendChild(textKolone);
+                kolona.style.width = "150px";
+                kolona.style.borderRight = "1px solid black";
+                red.appendChild(kolona);
+            }
+            else {
+                const kolona = document.createElement("td");
+                textKolone = document.createTextNode(' ');
+                kolona.appendChild(textKolone);
+                kolona.style.borderRight = "1px solid black";
+                red.appendChild(kolona);
+                
+            }
+        }
+        
+        
+
+        tableBody.appendChild(red);
+        red.style.border = "1px solid";
+    }
+
+    tabela.appendChild(tableBody);
+    document.body.appendChild(tabela);
+    tabela.style.borderCollapse = "collapse";
+    tabela.style.marginLeft = "50px";
+    tabela.style.marginTop = "50px";
+    tabela.style.fontSize = "12px";
+    tabela.style.textAlign = "center";
+}
+
+
+
+
+
+
+
+
+
+
+
+export let TabelaPrisustvo = function(divRef, podaci) {
+
+    divRef.innerHTML = "";
+
+    /*const tabela = document.createElement("table");
+    const tableBody = document.createElement("tbody");*/
+    const brojStudenata = podaci["studenti"].length;
+    const brojPrisustva = podaci["prisustva"].length;
+
 
     const posljednjaSedmica = podaci["prisustva"][brojPrisustva-1]["sedmica"];
 
@@ -63,7 +301,6 @@ export let TabelaPrisustvo = function(divRef, podaci) {
     }
 
     /* Postoji prisustvo za studenta koji nije u listi studenata, */
-
     var postojiIndex = 0;
     for(let j = 0; j < brojPrisustva; j++) {
         postojiIndex = 0;
@@ -112,222 +349,45 @@ export let TabelaPrisustvo = function(divRef, podaci) {
         divRef.innerHTML = "Podaci o prisustvu nisu validni!";
     }
     else {
-
-        for (let i = 0; i < brojStudenata + 1; i++) {
-            const red = document.createElement("tr");
-            let textKolone = document.createTextNode(' ');
-
-            for (let j = 0; j < 2; j++) { 
-                if(i == 0) {
-                    const kolona = document.createElement("th");
-                    
-                    if(j == 0) {
-                        textKolone = document.createTextNode('Ime i prezime');
-                    }
-                    else if(j == 1) {
-                        textKolone = document.createTextNode('Index');
-                    }
-                    
-                    kolona.appendChild(textKolone);
-                    kolona.style.width = "65px";
-                    kolona.style.borderRight = "1px solid black";
-                    red.appendChild(kolona);
-                }
-                else if(i != 0) {
-                    if(j == 0) {
-                        const kolona = document.createElement("td");
-                        textKolone = document.createTextNode(podaci["studenti"][i-1]["ime"]);
-                        kolona.appendChild(textKolone);
-                        kolona.style.width = "65px";
-                        kolona.style.borderRight = "1px solid black";
-                        red.appendChild(kolona);
-                    }
-                    else if(j == 1) {
-                        const kolona = document.createElement("td");
-                        textKolone = document.createTextNode(podaci["studenti"][i-1]["index"]);
-                        kolona.appendChild(textKolone);
-                        kolona.style.width = "65px";
-                        kolona.style.borderRight = "1px solid black";
-                        red.appendChild(kolona);
-                    } 
-                }
-            }
-
-            for(let j = 1; j <= posljednjaSedmica; j++) {
-                if(i == 0) {
-                    const kolona = document.createElement("th");
-                    textKolone = document.createTextNode(sedmica[j]);
-                    kolona.appendChild(textKolone);
-                    kolona.style.width = "65px";
-                    kolona.style.borderRight = "1px solid black";
-                    red.appendChild(kolona);
-                }
-                else if(i != 0 ) {
-                    if(j != posljednjaSedmica) {
-                        const kolona = document.createElement("td");
-                        var ukupnoPredavanjaIVjezbi = podaci["brojPredavanjaSedmicno"] + podaci["brojVjezbiSedmicno"];
-                        var stvarnoPrisustvo = 0;
-                        
-                        for(let k = 0; k < brojPrisustva; k++) {
-                            if(podaci["studenti"][i-1]["index"] == podaci["prisustva"][k]["index"] && podaci["prisustva"][k]["sedmica"] == j) {
-                                stvarnoPrisustvo = podaci["prisustva"][k]["predavanja"] + podaci["prisustva"][k]["vjezbe"];
-                            }
-                        }
-                        
-                        let ukupno = document.createTextNode((stvarnoPrisustvo / ukupnoPredavanjaIVjezbi)*100 + "%");
-                        
-                        kolona.appendChild(ukupno);
-                        kolona.style.width = "65px";
-                        kolona.style.borderRight = "1px solid black";
-                        red.appendChild(kolona);
-                    }
-                    else if(j == posljednjaSedmica) {
-                        
-                        for(let l = 0; l < 2; l++) {
-                            
-                            const maliRed = document.createElement("tr");
-
-                            if(l == 0) {
-                                for(let k = 0; k < podaci["brojPredavanjaSedmicno"]; k++) {
-                                
-                                    const malaKolona = document.createElement("td");
-                                    var pomocna = k+1;
-                                    textKolone = document.createTextNode("P" + pomocna);
-                                    malaKolona.appendChild(textKolone);
-                                    malaKolona.style.height = "35px";
-                                    malaKolona.style.borderBottom = "1px solid black";
-                                    malaKolona.style.borderRight = "1px solid black";
-                                    maliRed.appendChild(malaKolona);
-                                }
-        
-                                for(let k = 0; k < podaci["brojVjezbiSedmicno"]; k++) {
-                                    const malaKolona = document.createElement("td");
-                                    var pomocna = k+1;
-                                    textKolone = document.createTextNode("V" + pomocna);
-                                    malaKolona.appendChild(textKolone);
-                                    malaKolona.style.height = "35px";
-                                    malaKolona.style.borderBottom = "1px solid black";
-                                    malaKolona.style.borderRight = "1px solid black";
-                                    maliRed.appendChild(malaKolona);
-                                }
-        
-                                red.appendChild(maliRed);
-                            }
-                            else {
-
-                                var studentUnesen = 0;
-
-                                for(let k = 0; k < brojPrisustva; k++) {
-                                    if(podaci["studenti"][i-1]["index"] == podaci["prisustva"][k]["index"] && podaci["prisustva"][k]["sedmica"] == j) {
-                                        studentUnesen = 1;
-                                    }
-                                }
-
-                                var brojPredavanja = 0;
-                                var brojVjezbi = 0;
-
-                                for(let k = 0; k < brojPrisustva; k++) {
-                                    if(podaci["studenti"][i-1]["index"] == podaci["prisustva"][k]["index"] && podaci["prisustva"][k]["sedmica"] == j) {
-                                        brojPredavanja += podaci["prisustva"][k]["predavanja"];
-                                        brojVjezbi += podaci["prisustva"][k]["vjezbe"];
-                                    }
-                                }
-
-                                
-
-                                for(let k = 0; k < podaci["brojPredavanjaSedmicno"]; k++) {
-                                
-                                    const malaKolona = document.createElement("td");
-                                    var pomocna = k+1;
-                                    textKolone = document.createTextNode(" ");
-                                    malaKolona.appendChild(textKolone);
-                                    malaKolona.style.height = "35px";
-                                    
-                                    if(studentUnesen == 0) {
-                                        malaKolona.style.background = " ";
-                                    }
-                                    else if(brojPredavanja != 0) {
-                                        malaKolona.style.background = "green";
-                                        brojPredavanja--;
-                                    }
-                                    else {
-                                        malaKolona.style.background = "red";
-                                    }
-
-                                    malaKolona.style.borderRight = "1px solid black";
-                                    maliRed.style.borderRight = "1px solid black";
-
-                                    maliRed.appendChild(malaKolona);
-                                }
-        
-                                for(let k = 0; k < podaci["brojVjezbiSedmicno"]; k++) {
-                                    const malaKolona = document.createElement("td");
-                                    var pomocna = k+1;
-                                    textKolone = document.createTextNode(" ");
-                                    malaKolona.appendChild(textKolone);
-                                    malaKolona.style.height = "35px";
-
-                                    if(studentUnesen == 0) {
-                                        malaKolona.style.background = " ";
-                                    }
-                                    else if(brojVjezbi != 0) {
-                                        malaKolona.style.background = "green";
-                                        brojVjezbi--;
-                                    }
-                                    else {
-                                        malaKolona.style.background = "red";
-                                    }
-
-                                    malaKolona.style.borderRight = "1px solid black";
-                                    maliRed.appendChild(malaKolona);
-                                }
-        
-                                red.appendChild(maliRed);
-                            }
-                        }
-                    }
-                }
-            }
-
-            
-            if(posljednjaSedmica != 15) {
-                if(i == 0) {
-                    const kolona = document.createElement("th");
-                    if(posljednjaSedmica + 1 != 15) {
-                        textKolone = document.createTextNode(sedmica[posljednjaSedmica+1] + "-" + sedmica[15]);
-                    }
-                    else {
-                        textKolone = document.createTextNode(sedmica[15]);
-                    }
-                    
-                    kolona.appendChild(textKolone);
-                    kolona.style.width = "150px";
-                    kolona.style.borderRight = "1px solid black";
-                    red.appendChild(kolona);
-                }
-                else {
-                    const kolona = document.createElement("td");
-                    textKolone = document.createTextNode(' ');
-                    kolona.appendChild(textKolone);
-                    kolona.style.borderRight = "1px solid black";
-                    red.appendChild(kolona);
-                    
-                }
-            }
-            
-            
-
-        tableBody.appendChild(red);
-        red.style.border = "1px solid";
-        //red.style.height = "70px"
-        }
-    
-        tabela.appendChild(tableBody);
-        document.body.appendChild(tabela);
-        tabela.style.borderCollapse = "collapse";
-        tabela.style.marginLeft = "50px";
-        tabela.style.marginTop = "50px";
-        tabela.style.fontSize = "12px";
-        tabela.style.textAlign = "center";
+        crtajTabelu(divRef, podaci, posljednjaSedmica);
     }
-}
+
+    //dodavanje dugmadi
+
+    let sljedecaSedmica = function() {
+        var trenutnaSedmica = posljednjaSedmica;
+        if(trenutnaSedmica != 1) {
+            crtajTabelu(divRef, podaci, trenutnaSedmica+1);
+        }
+    }
+
+    let prethodnaSedmica = function() {
+        var trenutnaSedmica = posljednjaSedmica;
+        if(trenutnaSedmica != 1) {
+            crtajTabelu(divRef, podaci, trenutnaSedmica-1);
+        }
+    }
+
+    let button1 = document.createElement("button");
+    button1.style.marginTop = "30px";
+    button1.style.marginLeft = "50px";
+    button1.onclick = prethodnaSedmica;
+    button1.innerHTML = "Lijevo";
+    document.body.appendChild(button1);
+
+    let button2 = document.createElement("button");
+    button2.style.marginTop = "30px";
+    button2.style.marginLeft = "50px";
+    button2.onclick = sljedecaSedmica;
+    button2.innerHTML = "Desno";
+    document.body.appendChild(button2);
+
+    
+
+    
+
+    return {
+        sljedecaSedmica: sljedecaSedmica,
+        prethodnaSedmica: prethodnaSedmica
+    }
+};
