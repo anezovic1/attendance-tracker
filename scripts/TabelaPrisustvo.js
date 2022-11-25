@@ -28,7 +28,8 @@ export let TabelaPrisustvo = function(divRef, podaci) {
                 }
                 
                 kolona.appendChild(textKolone);
-                kolona.style.width = "50px";
+                kolona.style.width = "65px";
+                kolona.style.borderRight = "1px solid black";
                 red.appendChild(kolona);
             }
             else if(i != 0) {
@@ -36,12 +37,16 @@ export let TabelaPrisustvo = function(divRef, podaci) {
                     const kolona = document.createElement("td");
                     textKolone = document.createTextNode(podaci["studenti"][i-1]["ime"]);
                     kolona.appendChild(textKolone);
+                    kolona.style.width = "65px";
+                    kolona.style.borderRight = "1px solid black";
                     red.appendChild(kolona);
                 }
                 else if(j == 1) {
                     const kolona = document.createElement("td");
                     textKolone = document.createTextNode(podaci["studenti"][i-1]["index"]);
                     kolona.appendChild(textKolone);
+                    kolona.style.width = "65px";
+                    kolona.style.borderRight = "1px solid black";
                     red.appendChild(kolona);
                 } 
             }
@@ -52,6 +57,8 @@ export let TabelaPrisustvo = function(divRef, podaci) {
                 const kolona = document.createElement("th");
                 textKolone = document.createTextNode(sedmica[j]);
                 kolona.appendChild(textKolone);
+                kolona.style.width = "65px";
+                kolona.style.borderRight = "1px solid black";
                 red.appendChild(kolona);
             }
             else if(i != 0 ) {
@@ -69,30 +76,73 @@ export let TabelaPrisustvo = function(divRef, podaci) {
                     let ukupno = document.createTextNode((stvarnoPrisustvo / ukupnoPredavanjaIVjezbi)*100 + "%");
                     
                     kolona.appendChild(ukupno);
+                    kolona.style.width = "65px";
+                    kolona.style.borderRight = "1px solid black";
                     red.appendChild(kolona);
                 }
-                else {
+                else if(j == posljednjaSedmica) {
+                    
+                    
 
                     for(let l = 0; l < 2; l++) {
+                        
                         const maliRed = document.createElement("tr");
 
-                        for(let k = 0; k < podaci["prisustva"]["brojPredavanjaSedmicno"]; k++) {
-                            const malaKolona = document.createElement("td");
-                            var pomocna = k+1;
-                            textKolone = document.createTextNode("P" + pomocna);
-                            malaKolona.appendChild(textKolone);
-                            maliRed.appendChild(malaKolona);
+                        
+                        if(l == 0) {
+                            for(let k = 0; k < podaci["brojPredavanjaSedmicno"]; k++) {
+                            
+                                const malaKolona = document.createElement("td");
+                                var pomocna = k+1;
+                                textKolone = document.createTextNode("P" + pomocna);
+                                malaKolona.appendChild(textKolone);
+                                malaKolona.style.height = "35px";
+                                malaKolona.style.borderBottom = "1px solid black";
+                                malaKolona.style.borderRight = "1px solid black";
+                                maliRed.appendChild(malaKolona);
+                            }
+    
+                            for(let k = 0; k < podaci["brojVjezbiSedmicno"]; k++) {
+                                const malaKolona = document.createElement("td");
+                                var pomocna = k+1;
+                                textKolone = document.createTextNode("V" + pomocna);
+                                malaKolona.appendChild(textKolone);
+                                malaKolona.style.height = "35px";
+                                malaKolona.style.borderBottom = "1px solid black";
+                                malaKolona.style.borderRight = "1px solid black";
+                                maliRed.appendChild(malaKolona);
+                            }
+    
+                            red.appendChild(maliRed);
                         }
+                        else {
+                            for(let k = 0; k < podaci["brojPredavanjaSedmicno"]; k++) {
+                            
+                                const malaKolona = document.createElement("td");
+                                var pomocna = k+1;
+                                textKolone = document.createTextNode(" ");
+                                malaKolona.appendChild(textKolone);
+                                malaKolona.style.height = "35px";
+                                malaKolona.style.borderRight = "1px solid black";
+                                maliRed.style.borderRight = "1px solid black";
 
-                        for(let k = 0; k < podaci["prisustva"]["brojVjezbiSedmicno"]; k++) {
-                            const malaKolona = document.createElement("td");
-                            var pomocna = k+1;
-                            textKolone = document.createTextNode("V" + pomocna);
-                            malaKolona.appendChild(textKolone);
-                            maliRed.appendChild(malaKolona);
+                                maliRed.appendChild(malaKolona);
+                            }
+    
+                            for(let k = 0; k < podaci["brojVjezbiSedmicno"]; k++) {
+                                const malaKolona = document.createElement("td");
+                                var pomocna = k+1;
+                                textKolone = document.createTextNode(" ");
+                                malaKolona.appendChild(textKolone);
+                                malaKolona.style.height = "35px";
+                                malaKolona.style.borderRight = "1px solid black";
+                                maliRed.appendChild(malaKolona);
+                            }
+    
+                            red.appendChild(maliRed);
                         }
-
-                        tableBody.appendChild(maliRed);
+                        
+                       
                     }
                 }
             }
@@ -110,13 +160,15 @@ export let TabelaPrisustvo = function(divRef, podaci) {
                 }
                 
                 kolona.appendChild(textKolone);
+                kolona.style.width = "150px";
+                kolona.style.borderRight = "1px solid black";
                 red.appendChild(kolona);
             }
             else {
                 const kolona = document.createElement("td");
                 textKolone = document.createTextNode(' ');
                 kolona.appendChild(textKolone);
-                
+                kolona.style.borderRight = "1px solid black";
                 red.appendChild(kolona);
                 
             }
@@ -125,12 +177,11 @@ export let TabelaPrisustvo = function(divRef, podaci) {
         
 
       tableBody.appendChild(red);
-      red.style.border = "2px solid";
-      red.style.height = "50px"
+      red.style.border = "1px solid";
+      //red.style.height = "70px"
     }
   
     tabela.appendChild(tableBody);
     document.body.appendChild(tabela);
-    /*tabela.style.border = "2px solid";*/
-    tabela.setAttribute("border", "3");
+    tabela.style.borderCollapse = "collapse";
 }
