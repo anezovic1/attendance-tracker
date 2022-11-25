@@ -11,10 +11,9 @@ export let TabelaPrisustvo = function(divRef, podaci) {
 
     const posljednjaSedmica = podaci["prisustva"][brojPrisustva-1]["sedmica"];
 
-    //validacija 
+    //Validacija 
     var validno = 1;
 
-    
     var predavanja = podaci["brojPredavanjaSedmicno"];
     var vjezbe = podaci["brojVjezbiSedmicno"];
 
@@ -31,6 +30,7 @@ export let TabelaPrisustvo = function(divRef, podaci) {
     const brojiSedmice = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0];
 
     for(let i = 0; i < brojStudenata; i++) {
+        /* Isti student ima dva ili vise unosa prisustva za istu sedmicu. */
         for(let j = 0; j < brojPrisustva; j++) {
             if(podaci["studenti"][i]["index"] == podaci["prisustva"][j]["index"]) {
                 brojiSedmice[podaci["prisustva"][j]["sedmica"]]++;
@@ -50,8 +50,61 @@ export let TabelaPrisustvo = function(divRef, podaci) {
                 brojiSedmice[j] = 0;
             }
         }
+
+        /* Postoje dva ili vise studenata sa istim indeksom u listi studenata. */
+        for(let j = i+1; j < brojStudenata; j++) {
+            if(podaci["studenti"][i]["index"] == podaci["studenti"][j]["index"]) {
+                validno = 0;
+                break;
+            }
+        }
+
+        if(validno == 0) break;
     }
 
+    /* Postoji prisustvo za studenta koji nije u listi studenata, */
+
+    var postojiIndex = 0;
+    for(let j = 0; j < brojPrisustva; j++) {
+        postojiIndex = 0;
+        for(let i = 0; i < brojStudenata; i++) {
+            if(podaci["prisustva"][j]["index"] == podaci["studenti"][i]["index"]) {
+                postojiIndex = 1;
+            }
+        }
+        if(postojiIndex == 0) {
+            validno = 0;
+            break;
+        }
+    }
+    
+    /* Sedmica između, npr. 1 i 3, ne postoji 2. */
+    var min = 15;
+    var max = podaci["prisustva"][0]["sedmica"];
+
+    for(let i = 0; i < brojPrisustva; i++) {
+        if(podaci["prisustva"][i]["sedmica"] > max) max = podaci["prisustva"][i]["sedmica"];
+        if(podaci["prisustva"][i]["sedmica"] < min) min = podaci["prisustva"][i]["sedmica"];
+    }
+    
+    for(let i = 0; i < brojiSedmice.length; i++) {
+        brojiSedmice[i] = 0;
+    }
+
+    for(let i = 0; i < brojPrisustva; i++) {
+        brojiSedmice[podaci["prisustva"][i]["sedmica"]] = podaci["prisustva"][i]["sedmica"];
+    }
+   
+    var dodatak = 1;
+   
+    while(min + dodatak < max) {
+        console.log(dodatak)
+        if(brojiSedmice[min + dodatak] != max && brojiSedmice[min + dodatak] == 0) {
+            validno = 0;
+            break;
+        }
+        dodatak++;
+    }
 
     //
 
