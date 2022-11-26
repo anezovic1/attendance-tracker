@@ -1,10 +1,11 @@
 const tabela = document.createElement("table");
 const tableBody = document.createElement("tbody");
+
 const sedmica = ["nula", "I", "II", "III", "IV", "V", "VI", "VII", "VIII", "IX", "X", "XI", "XII", "XIII", "XIV", "XV"];
 
 function crtajTabelu(divRef, podaci, posljednjaSedmica) {
-
-    //divRef.innerHTML = ""; /* Brisem prethodni sadrzaj. */
+    /* Brisem prethodni sadrzaj. */
+    divRef.innerHTML = ""; 
     tableBody.innerHTML = "";
 
     const brojStudenata = podaci["studenti"].length;
@@ -27,6 +28,7 @@ function crtajTabelu(divRef, podaci, posljednjaSedmica) {
                 
                 kolona.appendChild(textKolone);
                 kolona.style.width = "65px";
+                
                 kolona.style.borderRight = "1px solid black";
                 red.appendChild(kolona);
             }
@@ -55,7 +57,6 @@ function crtajTabelu(divRef, podaci, posljednjaSedmica) {
                 const kolona = document.createElement("th");
                 textKolone = document.createTextNode(sedmica[j]);
                 kolona.appendChild(textKolone);
-                kolona.style.width = "65px";
                 kolona.style.borderRight = "1px solid black";
                 red.appendChild(kolona);
             }
@@ -71,7 +72,7 @@ function crtajTabelu(divRef, podaci, posljednjaSedmica) {
                         }
                     }
                     
-                    let ukupno = document.createTextNode((stvarnoPrisustvo / ukupnoPredavanjaIVjezbi)*100 + "%");
+                    let ukupno = document.createTextNode(Math.round((stvarnoPrisustvo / ukupnoPredavanjaIVjezbi)*100) + "%");
                     
                     kolona.appendChild(ukupno);
                     kolona.style.width = "65px";
@@ -84,7 +85,7 @@ function crtajTabelu(divRef, podaci, posljednjaSedmica) {
                         
                         const maliRed = document.createElement("tr");
 
-                        if(l == 0) {
+                        if(l == 0 && i != 0) {
                             for(let k = 0; k < podaci["brojPredavanjaSedmicno"]; k++) {
                             
                                 const malaKolona = document.createElement("td");
@@ -94,6 +95,7 @@ function crtajTabelu(divRef, podaci, posljednjaSedmica) {
                                 malaKolona.style.height = "35px";
                                 malaKolona.style.borderBottom = "1px solid black";
                                 malaKolona.style.borderRight = "1px solid black";
+                                malaKolona.style.fontSize = "9px";
                                 maliRed.appendChild(malaKolona);
                             }
     
@@ -105,6 +107,7 @@ function crtajTabelu(divRef, podaci, posljednjaSedmica) {
                                 malaKolona.style.height = "35px";
                                 malaKolona.style.borderBottom = "1px solid black";
                                 malaKolona.style.borderRight = "1px solid black";
+                                malaKolona.style.fontSize = "9px";
                                 maliRed.appendChild(malaKolona);
                             }
     
@@ -208,11 +211,8 @@ function crtajTabelu(divRef, podaci, posljednjaSedmica) {
                 kolona.appendChild(textKolone);
                 kolona.style.borderRight = "1px solid black";
                 red.appendChild(kolona);
-                
             }
         }
-        
-        
 
         tableBody.appendChild(red);
         red.style.border = "1px solid";
@@ -225,31 +225,18 @@ function crtajTabelu(divRef, podaci, posljednjaSedmica) {
     tabela.style.marginTop = "50px";
     tabela.style.fontSize = "12px";
     tabela.style.textAlign = "center";
+    tabela.style.float = "left";
+
+    
 }
 
 
 
-
-
-
-
-
-
-
-
-export let TabelaPrisustvo = function(divRef, podaci) {
-
-    divRef.innerHTML = "";
-
-    /*const tabela = document.createElement("table");
-    const tableBody = document.createElement("tbody");*/
+var  validacijaPodataka = function(podaci) {
     const brojStudenata = podaci["studenti"].length;
     const brojPrisustva = podaci["prisustva"].length;
 
-
     const posljednjaSedmica = podaci["prisustva"][brojPrisustva-1]["sedmica"];
-
-    //Validacija 
     var validno = 1;
 
     var predavanja = podaci["brojPredavanjaSedmicno"];
@@ -343,9 +330,20 @@ export let TabelaPrisustvo = function(divRef, podaci) {
         dodatak++;
     }
 
-    //
+    return validno;
+}
 
-    if(validno == 0) {
+
+export let TabelaPrisustvo = function(divRef, podaci) {
+
+    divRef.innerHTML = "";
+    
+    const brojStudenata = podaci["studenti"].length;
+    const brojPrisustva = podaci["prisustva"].length;
+    const posljednjaSedmica = podaci["prisustva"][brojPrisustva-1]["sedmica"];
+    var trenutnaSedmica = posljednjaSedmica;
+    
+    if(validacijaPodataka(podaci) == 0) {
         divRef.innerHTML = "Podaci o prisustvu nisu validni!";
     }
     else {
@@ -353,39 +351,48 @@ export let TabelaPrisustvo = function(divRef, podaci) {
     }
 
     //dodavanje dugmadi
-
+    
     let sljedecaSedmica = function() {
-        var trenutnaSedmica = posljednjaSedmica;
-        if(trenutnaSedmica != 1) {
-            crtajTabelu(divRef, podaci, trenutnaSedmica+1);
+        trenutnaSedmica++;
+        if(trenutnaSedmica <= 0) trenutnaSedmica = 1;
+        if(trenutnaSedmica > 15) trenutnaSedmica = 15;
+        if(trenutnaSedmica < 16  && validacijaPodataka(podaci) == 1) {
+            crtajTabelu(divRef, podaci, trenutnaSedmica);
         }
     }
-
+ 
     let prethodnaSedmica = function() {
-        var trenutnaSedmica = posljednjaSedmica;
-        if(trenutnaSedmica != 1) {
-            crtajTabelu(divRef, podaci, trenutnaSedmica-1);
+        trenutnaSedmica--;
+        if(trenutnaSedmica <= 0) trenutnaSedmica = 1;
+        if(trenutnaSedmica > 15) trenutnaSedmica = 15;
+        if(trenutnaSedmica >= 1 && validacijaPodataka(podaci) == 1) {
+            crtajTabelu(divRef, podaci, trenutnaSedmica);
         }
     }
 
-    let button1 = document.createElement("button");
-    button1.style.marginTop = "30px";
-    button1.style.marginLeft = "50px";
-    button1.onclick = prethodnaSedmica;
-    button1.innerHTML = "Lijevo";
-    document.body.appendChild(button1);
+    if(validacijaPodataka(podaci) == 1) {
+        let divDugmadi = document.createElement("div");
+        divDugmadi.style.clear = "left";
 
-    let button2 = document.createElement("button");
-    button2.style.marginTop = "30px";
-    button2.style.marginLeft = "50px";
-    button2.onclick = sljedecaSedmica;
-    button2.innerHTML = "Desno";
-    document.body.appendChild(button2);
+        let button1 = document.createElement("button");
+        button1.style.margin = "20px";
+        button1.innerHTML = "Lijevo";
+        divDugmadi.appendChild(button1);
 
+        let button2 = document.createElement("button");
+        button2.style.margin = "20px";
+        button2.innerHTML = "Desno";
+        divDugmadi.appendChild(button2);
+
+        divDugmadi.style.marginLeft= "50px";
+        divDugmadi.style.background = "green";
+        document.body.appendChild(divDugmadi);
+        
+        button1.onclick = prethodnaSedmica;
+        button2.onclick = sljedecaSedmica;
+        
+    }
     
-
-    
-
     return {
         sljedecaSedmica: sljedecaSedmica,
         prethodnaSedmica: prethodnaSedmica
