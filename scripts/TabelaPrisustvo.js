@@ -7,7 +7,7 @@ function crtajTabelu(divRef, podaci, posljednjaSedmica) {
     /* Brisem prethodni sadrzaj. */
     divRef.innerHTML = ""; 
     tableBody.innerHTML = "";
-
+    
     const brojStudenata = podaci["studenti"].length;
     const brojPrisustva = podaci["prisustva"].length;
 
@@ -226,7 +226,6 @@ function crtajTabelu(divRef, podaci, posljednjaSedmica) {
     tabela.style.fontSize = "12px";
     tabela.style.textAlign = "center";
     tabela.style.float = "left";
-
     
 }
 
@@ -351,7 +350,7 @@ export let TabelaPrisustvo = function(divRef, podaci) {
     }
 
     //dodavanje dugmadi
-    
+   
     let sljedecaSedmica = function() {
         trenutnaSedmica++;
         if(trenutnaSedmica <= 0) trenutnaSedmica = 1;
@@ -372,22 +371,23 @@ export let TabelaPrisustvo = function(divRef, podaci) {
 
     if(validacijaPodataka(podaci) == 1) {
         let divDugmadi = document.createElement("div");
-        divDugmadi.style.clear = "left";
-
+        
         let button1 = document.createElement("button");
         button1.style.margin = "20px";
-        button1.innerHTML = "Lijevo";
+        button1.innerHTML = '<i class="fa-solid fa-arrow-left"></i>';
         divDugmadi.appendChild(button1);
 
         let button2 = document.createElement("button");
         button2.style.margin = "20px";
-        button2.innerHTML = "Desno";
+        button2.innerHTML = '<i class="fa-solid fa-arrow-right"></i>';
         divDugmadi.appendChild(button2);
 
         divDugmadi.style.marginLeft= "50px";
-        divDugmadi.style.background = "green";
+        //divDugmadi.style.background = "green";
+        divDugmadi.style.clear = "left";
+
         document.body.appendChild(divDugmadi);
-        
+
         button1.onclick = prethodnaSedmica;
         button2.onclick = sljedecaSedmica;
         
