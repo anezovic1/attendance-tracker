@@ -350,35 +350,39 @@ export let TabelaPrisustvo = function(divRef, podaci) {
     }
 
     //dodavanje dugmadi
-   
-    let sljedecaSedmica = function() {
-        trenutnaSedmica++;
-        if(trenutnaSedmica <= 0) trenutnaSedmica = 1;
-        if(trenutnaSedmica > 15) trenutnaSedmica = 15;
-        if(trenutnaSedmica < 16  && validacijaPodataka(podaci) == 1) {
-            crtajTabelu(divRef, podaci, trenutnaSedmica);
-        }
-    }
- 
     let prethodnaSedmica = function() {
         trenutnaSedmica--;
         if(trenutnaSedmica <= 0) trenutnaSedmica = 1;
         if(trenutnaSedmica > 15) trenutnaSedmica = 15;
+        
         if(trenutnaSedmica >= 1 && validacijaPodataka(podaci) == 1) {
             crtajTabelu(divRef, podaci, trenutnaSedmica);
         }
     }
 
+    let sljedecaSedmica = function() {
+        trenutnaSedmica++;
+        if(trenutnaSedmica <= 0) trenutnaSedmica = 1;
+        if(trenutnaSedmica > 15) trenutnaSedmica = 15;
+        if(trenutnaSedmica > posljednjaSedmica) trenutnaSedmica = posljednjaSedmica;
+
+        if(validacijaPodataka(podaci) == 1) {
+            crtajTabelu(divRef, podaci, trenutnaSedmica);
+        }
+    }
+ 
     if(validacijaPodataka(podaci) == 1) {
         let divDugmadi = document.createElement("div");
         
         let button1 = document.createElement("button");
         button1.style.margin = "20px";
+        button1.style.width = "60px";
         button1.innerHTML = '<i class="fa-solid fa-arrow-left"></i>';
         divDugmadi.appendChild(button1);
 
         let button2 = document.createElement("button");
         button2.style.margin = "20px";
+        button2.style.width = "60px";
         button2.innerHTML = '<i class="fa-solid fa-arrow-right"></i>';
         divDugmadi.appendChild(button2);
 
