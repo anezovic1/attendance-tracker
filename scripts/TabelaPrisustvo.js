@@ -225,7 +225,6 @@ function crtajTabelu(divRef, podaci, posljednjaSedmica) {
     tabela.style.marginTop = "50px";
     tabela.style.fontSize = "12px";
     tabela.style.textAlign = "center";
-    tabela.style.float = "left";
     
 }
 
@@ -348,6 +347,7 @@ export let TabelaPrisustvo = function(divRef, podaci) {
     else {
         crtajTabelu(divRef, podaci, posljednjaSedmica);
     }
+    
 
     //dodavanje dugmadi
     let prethodnaSedmica = function() {
@@ -358,6 +358,8 @@ export let TabelaPrisustvo = function(divRef, podaci) {
         if(trenutnaSedmica >= 1 && validacijaPodataka(podaci) == 1) {
             crtajTabelu(divRef, podaci, trenutnaSedmica);
         }
+
+        
     }
 
     let sljedecaSedmica = function() {
@@ -372,6 +374,7 @@ export let TabelaPrisustvo = function(divRef, podaci) {
     }
  
     if(validacijaPodataka(podaci) == 1) {
+        
         let divDugmadi = document.createElement("div");
         
         let button1 = document.createElement("button");
@@ -387,10 +390,12 @@ export let TabelaPrisustvo = function(divRef, podaci) {
         divDugmadi.appendChild(button2);
 
         divDugmadi.style.marginLeft= "50px";
-        //divDugmadi.style.background = "green";
-        divDugmadi.style.clear = "left";
-
         document.body.appendChild(divDugmadi);
+
+        tabela.style.position = "relative";
+        divDugmadi.style.position = "absolute";
+        divDugmadi.style.bottom = "0px";
+        
 
         button1.onclick = prethodnaSedmica;
         button2.onclick = sljedecaSedmica;
