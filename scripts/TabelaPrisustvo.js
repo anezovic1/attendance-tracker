@@ -241,7 +241,6 @@ function crtajTabelu(divRef, podaci, posljednjaSedmica) {
     tabela.style.marginTop = "50px";
     tabela.style.fontSize = "12px";
     tabela.style.textAlign = "center";
-    
 }
 
 
@@ -362,7 +361,7 @@ let TabelaPrisustvo = function(divRef, podaci) {
         if(podaci["prisustva"][i]["sedmica"] > max) max = podaci["prisustva"][i]["sedmica"];
     }
     const posljednjaSedmica = max;
-    
+
     //const posljednjaSedmica = podaci["prisustva"][brojPrisustva-1]["sedmica"];
     var trenutnaSedmica = posljednjaSedmica;
     
