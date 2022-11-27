@@ -7,9 +7,22 @@ function crtajTabelu(divRef, podaci, posljednjaSedmica) {
     /* Brisem prethodni sadrzaj. */
     divRef.innerHTML = ""; 
     tableBody.innerHTML = "";
-    
+
     const brojStudenata = podaci["studenti"].length;
     const brojPrisustva = podaci["prisustva"].length;
+
+    const divNaslova = document.createElement("div");
+    let naslov = document.createTextNode("Naziv predmeta: " + podaci["predmet"]);
+
+    var span = document.createElement('span');
+
+    span.style.fontSize = "20px";
+    span.style.marginLeft = "50px";
+    span.style.fontWeight = "bold";
+    span.appendChild(naslov);
+
+    divNaslova.appendChild(span);
+    divRef.appendChild(divNaslova);
 
     for (let i = 0; i < brojStudenata + 1; i++) {
         const red = document.createElement("tr");
@@ -332,10 +345,12 @@ var  validacijaPodataka = function(podaci) {
 }
 
 
-export let TabelaPrisustvo = function(divRef, podaci) {
+let TabelaPrisustvo = function(divRef, podaci) {
 
     divRef.innerHTML = "";
-    
+    divRef.style.overflowX = "none";
+    divRef.style.overflowY = "scroll";
+
     const brojStudenata = podaci["studenti"].length;
     const brojPrisustva = podaci["prisustva"].length;
     const posljednjaSedmica = podaci["prisustva"][brojPrisustva-1]["sedmica"];
@@ -350,6 +365,7 @@ export let TabelaPrisustvo = function(divRef, podaci) {
     
 
     //dodavanje dugmadi
+
     let prethodnaSedmica = function() {
         trenutnaSedmica--;
         if(trenutnaSedmica <= 0) trenutnaSedmica = 1;
@@ -358,8 +374,6 @@ export let TabelaPrisustvo = function(divRef, podaci) {
         if(trenutnaSedmica >= 1 && validacijaPodataka(podaci) == 1) {
             crtajTabelu(divRef, podaci, trenutnaSedmica);
         }
-
-        
     }
 
     let sljedecaSedmica = function() {
@@ -392,11 +406,10 @@ export let TabelaPrisustvo = function(divRef, podaci) {
         divDugmadi.style.marginLeft= "50px";
         document.body.appendChild(divDugmadi);
 
-        tabela.style.position = "relative";
+        divRef.style.position = "relative";
         divDugmadi.style.position = "absolute";
         divDugmadi.style.bottom = "0px";
-        
-
+    
         button1.onclick = prethodnaSedmica;
         button2.onclick = sljedecaSedmica;
         
