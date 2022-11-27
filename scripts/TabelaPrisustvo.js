@@ -8,6 +8,9 @@ function crtajTabelu(divRef, podaci, posljednjaSedmica) {
     divRef.innerHTML = ""; 
     tableBody.innerHTML = "";
 
+    divRef.style.overflowX = "none";
+    divRef.style.overflowY = "scroll";
+
     const brojStudenata = podaci["studenti"].length;
     const brojPrisustva = podaci["prisustva"].length;
 
@@ -348,12 +351,19 @@ var  validacijaPodataka = function(podaci) {
 let TabelaPrisustvo = function(divRef, podaci) {
 
     divRef.innerHTML = "";
-    divRef.style.overflowX = "none";
-    divRef.style.overflowY = "scroll";
-
+    
     const brojStudenata = podaci["studenti"].length;
     const brojPrisustva = podaci["prisustva"].length;
-    const posljednjaSedmica = podaci["prisustva"][brojPrisustva-1]["sedmica"];
+
+    /* Određivanje posljednje sedmice. */
+    var max = podaci["prisustva"][0]["sedmica"];
+
+    for(let i = 0; i < brojPrisustva; i++) {
+        if(podaci["prisustva"][i]["sedmica"] > max) max = podaci["prisustva"][i]["sedmica"];
+    }
+    const posljednjaSedmica = max;
+    
+    //const posljednjaSedmica = podaci["prisustva"][brojPrisustva-1]["sedmica"];
     var trenutnaSedmica = posljednjaSedmica;
     
     if(validacijaPodataka(podaci) == 0) {
