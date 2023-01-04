@@ -1,0 +1,23 @@
+{
+  "name": "wt22p18742",
+  "version": "1.0.0",
+  "description": "**Edit a file, create a new file, and clone from Bitbucket in under 2 minutes**",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://a_nezovic@bitbucket.org/a_nezovic/wt22p18742.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://bitbucket.org/a_nezovic/wt22p18742/issues"
+  },
+  "homepage": "https://bitbucket.org/a_nezovic/wt22p18742#readme",
+  "dependencies": {
+    "express": "^4.18.2"
+  }
+}
