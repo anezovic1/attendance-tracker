@@ -18,6 +18,17 @@
         "predmeti": [
             "PREDMET1"
         ]
+    },
+    {
+        "nastavnik": {
+            "username": "anida",
+            "password_hash": "a"
+        },
+        "predmeti": [
+            "PREDMET1",
+            "PREDMET2",
+            "PREDMET3"
+        ]
     }
 ]
 
