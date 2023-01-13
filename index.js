@@ -10,7 +10,6 @@ var port = 3000;
 
 const app = express();
 
-
 app.use(express.static("public"));
 app.use(bodyParser.json({extended: true})); /* use it to get form values which we submit */
 
@@ -78,40 +77,57 @@ app.post('/login', function(req, res) {
             session.predmeti = uneseniNastavnici[index]["predmeti"];
             returnMessage["poruka"] = 'Uspješna prijava';
 
-            console.log('uspio');
+            //console.log(returnMessage);
             res.status(200).json(returnMessage);
         }
         else{
             session = null;
             returnMessage["poruka"] = 'Neuspješna prijava';
-            //res.json(returnMessage);
+            //console.log(returnMessage);
+            res.json(returnMessage);
         }
     });
 
 });
 
-app.get('/predmeti', function(req, res) {
+app.get('/predmeti.html', function(req, res) {
 
     if(session != null) {
         res.sendFile(__dirname + '/public/html/predmeti.html');
-        res.send(session.predmeti);
+        //res.send(session.predmeti);
     }
     else {
-        console.log(session.username);
-
-        res.status(400).json({ greska: 'Nastavnik nije loginovan' });
+        res.json({ greska: 'Nastavnik nije loginovan' });
     }
    
     
 });
 
-app.get('/predmeti.html', function(req, res) {
+app.get('/predmeti', function(req, res) {
     res.sendFile(__dirname + '/public/html/prijava.html');
 });
 
 app.post('/logout', function(req, res) {
-   session.username = null;
-   session.predmeti = null;
+    session.username = null;
+    session.predmeti = null;
+    res.json({ poruka: 'Log out pritisnut!' });
+});
+
+app.get('/predmet/:naziv', function(req, res) {
+
+    fs.readFile('data/prisustva.json', 'utf8', function(err, data) {
+        const unesenaPrisustva= JSON.parse(data);
+        const uneseniPredmet = req.params.naziv;
+
+        /*for(let i = 0; i < unesenaPrisustva.length; i++) {
+            if(unesenaPrisustva[i]["predmet"] == uneseniPredmet)
+
+        }*/
+        
+    });
+});
+
+app.post('/prisustvo/predmet/:naziv/student/:index', function(err, data) {
 
 });
 

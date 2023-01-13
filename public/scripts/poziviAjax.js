@@ -18,15 +18,14 @@ const PoziviAjax = (()=>{
                 }
                 else {
                     fnCallback(null, ajax.responseText)
+                    //pars predmeti
                 }
             }
         }
-        ajax.open("GET", "http://localhost:3000/predmeti", true);
+        ajax.open("GET", "http://localhost:3000/predmeti.html", true);
         ajax.send();
     }
     
- 
-  
     function impl_postLogin(username,password,fnCallback){
         var ajax = new XMLHttpRequest();
         ajax.onreadystatechange = function() {
@@ -36,7 +35,7 @@ const PoziviAjax = (()=>{
                 }
                 else {
                     //fnCallback(null, ajax.responseText);
-                    window.location.href = "/predmeti";
+                    window.location.href = "/predmeti.html";
                 }
             }
         }
@@ -45,20 +44,33 @@ const PoziviAjax = (()=>{
         ajax.send(JSON.stringify({username: username, password: password}));
     }
 
-   /* function impl_postLogout(fnCallback){
-
+    function impl_postLogout(fnCallback){
+        var ajax = new XMLHttpRequest();
+        ajax.onreadystatechange = function() {
+            if(ajax.readyState == 4 && ajax.status == 200) {
+                if(ajax.responseText.includes('error')) {
+                    fnCallback(ajax.responseText, null);
+                }
+                else {
+                    fnCallback(null, ajax.responseText);
+                }
+            }
+        }
+        ajax.open("POST", "http://localhost:3000/logout", true);
+        ajax.setRequestHeader("Content-Type", "application/json");
+        ajax.send(JSON.stringify({poruka: 'usao'}));
     }
 
     //prisustvo ima oblik {sedmica:N,predavanja:P,vjezbe:V}
-    function impl_postPrisustvo(naziv,index,prisustvo,fnCallback){
+    /*function impl_postPrisustvo(naziv,index,prisustvo,fnCallback){
 
     }*/
 
     return{
         postLogin: impl_postLogin,
-       // postLogout: impl_postLogout,
+        postLogout: impl_postLogout,
        // getPredmet: impl_getPredmet,
-       // getPredmeti: impl_getPredmeti,
+       getPredmeti: impl_getPredmeti,
        // postPrisustvo: impl_postPrisustvo
     };
 })();
