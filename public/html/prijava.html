@@ -1,25 +1,29 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Prijava</title>
-    <script src="../scripts/poziviAjax.js"></script>  
-    <script src="../scripts/prijava.js"></script>  
-</head>
-<body>
-    <h2>Forma za prijavu</h2>
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Prijava</title>
+        <script src="poziviAjax.js"></script>  
+        <script src="prijava.js"></script>
+        <link rel="stylesheet" type="text/css" href="prijava.css">
+    </head>
+    <body>
+        <h2>Forma za prijavu</h2>
 
-    <form action="" id="formaZaPrijavu">
-        <label for="username">Username:</label><br>
-        <input type="text" id="username" name="username"><br>
+        <form action="" id="formaZaPrijavu">
+            <label for="username">Username:</label><br>
+            <input type="text" id="username" name="username"><br>
 
-        <label for="password">Password:</label><br>
-        <input type="password" id="password" name="password"><br><br>
-        
-        <button id="sendButton" type="button" onclick="submitClick()">Pošalji</button>
-    </form> 
-</body>
+            <label for="password">Password:</label><br>
+            <input type="password" id="password" name="password"><br><br>
+            
+            <button id="sendButton" type="button" onclick="submitClick()">Pošalji</button>
+        </form> 
+
+        <div id="porukaUpozorenja">
+        </div>
+    </body>
 </html>
 

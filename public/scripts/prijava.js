@@ -3,8 +3,17 @@ function submitClick() {
     let uneseniPassword = document.getElementById("password").value;
     
     PoziviAjax.postLogin(uneseniUsername, uneseniPassword, function(error, data) {
-        if(uneseniUsername == null || uneseniPassword == null) console.log("Greška!");
-        if(error) console.log('Greška: ' + error);
-        if(data) console.log('OK');
+        if(error) {
+            /* Ako korisnik želi odmah pristupiti localhost:3000/predmeti */ 
+
+            let poruka = document.getElementById("porukaUpozorenja")
+            poruka.innerHTML=""
+            poruka.appendChild(document.createTextNode('Unijeli ste pogrešan username ili password!'));
+            poruka.setAttribute("class", "errorPoruka")
+            document.body.appendChild(poruka);
+        } 
+        else {
+            window.location.href = "/predmeti.html";
+        }
     });
 }
