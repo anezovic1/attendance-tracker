@@ -1,16 +1,29 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-    <script src="../scripts/poziviAjax.js"></script>  
-    <script src="../scripts/predmeti.js"></script>  
-</head>
-<body>
-    <p>Predmeti</p>
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" type="text/css" href="predmeti.css">
+        <script src="https://kit.fontawesome.com/f8054a3b2e.js" crossorigin="anonymous"></script> 
+        <title>Document</title>
+        <script src="poziviAjax.js"></script>  
+        <script src="predmeti.js"></script> 
+        <script src="TabelaPrisustvo.js"></script>   
+    </head>
+    <body>
+        <div id="meni">
+            <div id="buttonDiv">
+                <button id="logoutButton" type="button" onclick="logoutClick()">Log Out</button>
+            </div>
 
-    <button id="logoutButton" type="button" onclick="logoutClick()">Log Out</button>
-</body>
+            <div id="listaPredmeta">
+            </div>
+        </div>
+
+
+        <div id="mainDiv">
+        </div>
+
+    </body>
 </html>

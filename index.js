@@ -45,36 +45,24 @@ app.post('/login', function(req, res) {
         if (err) console.error(err);
         const uneseniNastavnici = JSON.parse(data);
         var postoji = 0;
-        var index = 0;
-
 
         var password = req.body.password;
-       /* bcrypt.hash(password, 10, function(err, hash) {
-            if(err) console.log(err);
-            else if(hash) {
-                password = hash;
-                return password;
-            }
-        });*/
-
+       
         for(let i = 0; i < uneseniNastavnici.length; i++) {
             /* Kako je password u nastavnici.json vec hashiran, ne trebam ga hashirati. */
 
             var hashPass = uneseniNastavnici[i]["nastavnik"]["password_hash"];
 
-            console.log("Iz nastavnici "+hashPass+" i uneseni hashirani "+password)
+            //console.log("Iz nastavnici " + hashPass + " i uneseni hashirani " + password)
 
             if(uneseniNastavnici[i]["nastavnik"]["username"] == req.body.username) {
-                console.log("da, usao");
-                bcrypt.compare(password, hashPass, (err, check) => {
+                bcrypt.compare(password, hashPass, function(err, check) {
                     
                     if (check) {
                         session = req.session;
                         session.username = req.body.username;
                         session.predmeti = uneseniNastavnici[i]["predmeti"];
                         returnMessage["poruka"] = 'Uspješna prijava';
-
-                        console.log(session.predmeti + " " + session.username);
                         res.status(200).json(returnMessage);
                     } 
                     else {
@@ -86,22 +74,25 @@ app.post('/login', function(req, res) {
                 });  
             }
         }
-
     });
-
 });
 
-app.get('/predmeti.html', function(req, res) {
+app.post('/logout', function(req, res) {
+    session.username = null;
+    session.predmeti = null;
+    //console.log('unisten');
+    res.json({ poruka: 'Log out pritisnut!' });
+});
 
+/* Ruta koja omogućava ispis poruke, ukoliko nastavnik nije loginovan ili prikaz predmeta ukoliko je loginova. */
+
+app.get('/predmeti.html', function(req, res) {
     if(session != null) {
         res.sendFile(__dirname + '/public/html/predmeti.html');
-        //res.send(session.predmeti);
     }
     else {
-        res.json({ greska: 'Nastavnik nije loginovan' });
+        res.status(404).json({ greska: 'Nastavnik nije loginovan' });
     }
-   
-    
 });
 
 app.get('/predmeti', function(req, res) {
@@ -111,14 +102,6 @@ app.get('/predmeti', function(req, res) {
     else {
         res.status(404).json({ greska: 'Nastavnik nije loginovan' });
     }
-});
-
-app.post('/logout', function(req, res) {
-    session.username = null;
-    session.predmeti = null;
-    //session destroy
-    console.log('unisten');
-    res.json({ poruka: 'Log out pritisnut!' });
 });
 
 app.get('/predmet/:naziv', function(req, res) {
@@ -141,6 +124,5 @@ app.post('/prisustvo/predmet/:naziv/student/:index', function(err, data) {
 
 });
 
-//1. 1234
 
 app.listen(port)

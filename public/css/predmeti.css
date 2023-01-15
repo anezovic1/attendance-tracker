@@ -1,0 +1,62 @@
+#meni {
+    position: fixed;
+    left: 0px;
+    top: 0px;
+    right: 0;
+    height: 100px;
+    color: beige;
+    display: flex;
+    flex-direction: column-reverse;
+}
+
+#buttonDiv {
+    width: 100%;
+    background-color: rgb(124, 124, 220);
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    padding-left: 30px;
+}
+
+#logoutButton {
+    display: inline-block;
+    outline: none;
+    border-width: 0px;
+    border-radius: 3px;
+    box-sizing: border-box;
+    font-size: inherit;
+    font-weight: 500;
+    max-width: 100%;
+    text-align: center;
+    text-decoration: none;
+    background: #dca2efa5;
+    cursor: pointer;
+    line-height: 32px;
+    padding: 0px 12px;
+    vertical-align: middle;
+    width: auto;
+    font-size: 14px;
+}
+
+#listaPredmeta {
+    width: 100%;
+    background-color: rgb(181, 181, 241);
+    color: black;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    padding: 10px;
+   
+}
+
+.klasaPredmet {
+    padding: 0;
+    margin: 0;
+}
+
+#mainDiv {
+    margin-top: 200px;
+
+}
