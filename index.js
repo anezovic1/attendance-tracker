@@ -131,17 +131,23 @@ app.post('/prisustvo/predmet/:naziv/student/:index', function(req, res) {
 
     //console.log(fileData);
     //console.log(jsonData); nije json
-
+    var dodan = 0;
     for(let i = 0; i < jsonData.length; i++) {
         if(jsonData[i]["predmet"] == uneseniPredmet) {
             for(let j = 0; j < jsonData[i]["prisustva"].length; j++) {
                 if(jsonData[i]["prisustva"][j]["index"] == uneseniIndex && jsonData[i]["prisustva"][j]["sedmica"] == sedmica) {
                     jsonData[i]["prisustva"][j]["predavanja"] = predavanja;
                     jsonData[i]["prisustva"][j]["vjezbe"] = vjezbe;
+                    dodan = 1;
                 }
             }
+            //dakle, studentu se tek dodaje prisustvo za tu sedmicu
+            if(dodan == 0) {
+                var novi = {"sedmica": sedmica, "predavanja": predavanja, "vjezbe": vjezbe, "index": parseInt(uneseniIndex)};
+                jsonData[i]["prisustva"].push(novi);
+            }
+            
         }
-        break;
     }
 
 
@@ -149,24 +155,10 @@ app.post('/prisustvo/predmet/:naziv/student/:index', function(req, res) {
         if (err) {
             return console.error(err);
         }
-       res.status(200).json(jsonData);
+        res.status(200).json(jsonData);
     });
     
 
-/*
-    fs.writeFile('data/prisustva.json', 'utf8', function(err, data) {
-        const unesenaPrisustva= JSON.parse(data);
-
-        
-        let prisustvaZaStudentaSaIndexom = "";
-       
-        for(let i = 0; i < unesenaPrisustva.length; i++) {
-            if(unesenaPrisustva[i]["predmet"] == uneseniPredmet) {
-                
-            }
-        }
-    });
-*/
   
 });
 

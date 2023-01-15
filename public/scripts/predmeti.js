@@ -55,6 +55,13 @@ function mijenjaBoju(polje) {
     let predavanjaStudenta = parseInt(podaciIzPolja[4]);
     let vjezbeStudenta = parseInt(podaciIzPolja[5]);
 
+    //console.log(pritisnuto);
+    //console.log(indeksStudenta);
+    //console.log(predmetStudenta);
+    console.log(sedmicaStudenta);
+    //console.log(predavanjaStudenta);
+    //console.log(vjezbeStudenta);
+
     if(polje.style.background == "red") {
         if(pritisnuto == "P") {
             predavanjaStudenta = predavanjaStudenta + 1;
@@ -83,6 +90,7 @@ function mijenjaBoju(polje) {
         polje.style.background = "green"
     }
 
+
     //parseInt(podaciIzPolja[2]);
     //parseInt(podaciIzPolja[3]);
 
@@ -95,12 +103,21 @@ function mijenjaBoju(polje) {
             console.log(err);
         } 
         else {
-            console.log(data);
+            //console.log("poadaci " + data);
             let main = document.getElementById("mainDiv")
             main.innerHTML = ""
             let podaci = JSON.parse(data);
-            let tabela = TabelaPrisustvo(main, data);
+
+            for(let i = 0; i < podaci.length; i++) {
+                if(podaci[i]["predmet"] == predmetStudenta) {
+                    console.log(podaci[i]["predmet"]);
+                    let tabela = TabelaPrisustvo(main, podaci[i]);
+                    break;
+                }
+            }
+
+            
         }
-    })
+    });
 
 }
