@@ -149,7 +149,8 @@ function crtajTabelu(divRef, podaci, posljednjaSedmica) {
                                 }
                             }
 
-                            
+                            var pomocnaPredavanja = brojPredavanja;
+                            var pomocnaVjezbe = brojVjezbi;
 
                             for(let k = 0; k < podaci["brojPredavanjaSedmicno"]; k++) {
                             
@@ -173,6 +174,8 @@ function crtajTabelu(divRef, podaci, posljednjaSedmica) {
                                 malaKolona.style.borderRight = "1px solid black";
                                 maliRed.style.borderRight = "1px solid black";
 
+                                malaKolona.setAttribute("id", "P" + "/" + podaci["studenti"][i-1]["index"] + "/" + podaci["predmet"] + "/" + posljednjaSedmica + "/" + pomocnaPredavanja + "/" + pomocnaVjezbe);
+                                malaKolona.setAttribute("onClick", "mijenjaBoju(this)");
                                 maliRed.appendChild(malaKolona);
                             }
     
@@ -195,6 +198,10 @@ function crtajTabelu(divRef, podaci, posljednjaSedmica) {
                                 }
 
                                 malaKolona.style.borderRight = "1px solid black";
+
+                                
+                                malaKolona.setAttribute("id", "V" + "/" + podaci["studenti"][i-1]["index"] + "/" + podaci["predmet"] + "/" + posljednjaSedmica + "/" + pomocnaPredavanja + "/" + pomocnaVjezbe);
+                                malaKolona.setAttribute("onClick", "mijenjaBoju(this)");
                                 maliRed.appendChild(malaKolona);
                             }
     

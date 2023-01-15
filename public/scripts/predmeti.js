@@ -1,7 +1,7 @@
 window.onload = function() {
     PoziviAjax.getPredmeti(function(error, data) {
         if(error){
-            let poruka = JSON.parse(error);
+            //let poruka = JSON.parse(error);
             document.body.innerHTML="";
             document.body.appendChild(document.createTextNode("Greška! Morate se prijaviti da biste vidjeli predmete."));
         } 
@@ -16,7 +16,6 @@ window.onload = function() {
                 predmet.setAttribute("class", "klasaPredmet");
                 predmet.appendChild(document.createTextNode(predmeti[i]))
                 predmetiDiv.appendChild(predmet);
-
             }
         }
     });
@@ -24,8 +23,10 @@ window.onload = function() {
 
 function logoutClick() {
     PoziviAjax.postLogout(function(error, data) {
-        if(error) console.log('Greška: ' + error);  
-        if(data) {
+        if(error) {
+            console.log('Greška: ' + error);  
+        }
+        else if(data) {
             console.log('OK');
             window.location.href = "/login";
         }
@@ -35,7 +36,7 @@ function logoutClick() {
 function otvoriTabelu(nazivPredmeta) {
     PoziviAjax.getPredmet(nazivPredmeta, function(err, data) {
         if(err){
-            
+            console.log(err);
         } 
         else {
             let podaci = JSON.parse(data);
@@ -43,28 +44,63 @@ function otvoriTabelu(nazivPredmeta) {
             let tabela = TabelaPrisustvo(divRef, podaci);
         }
     })
-
 }
-/*
-function mijenjajBoju(polje) {
-    let niz = polje.id.split("-");
 
-    +
-    //logika za boje
+function mijenjaBoju(polje) {
+    let podaciIzPolja = polje.id.split("/");
+    let pritisnuto = podaciIzPolja[0];
+    let indeksStudenta = podaciIzPolja[1];
+    let predmetStudenta = podaciIzPolja[2];
+    let sedmicaStudenta = parseInt(podaciIzPolja[3]);
+    let predavanjaStudenta = parseInt(podaciIzPolja[4]);
+    let vjezbeStudenta = parseInt(podaciIzPolja[5]);
 
-    PoziviAjax.postPrisustvo(naziv, index, prissustvo, function(err, data) {
-        if(error) {
+    if(polje.style.background == "red") {
+        if(pritisnuto == "P") {
+            predavanjaStudenta = predavanjaStudenta + 1;
+        }
+        if(pritisnuto == "V") {
+            vjezbeStudenta = vjezbeStudenta + 1;
+        }
+        polje.style.background = "green"
+    }
+    else if(polje.style.background == "green") {
+        if(pritisnuto == "P") {
+            predavanjaStudenta = predavanjaStudenta - 1;
+        }
+        if(pritisnuto == "V") {
+            vjezbeStudenta = vjezbeStudenta - 1;
+        }
+        polje.style.background = "red"
+    }
+    else {
+        if(pritisnuto == "P") {
+            predavanjaStudenta = predavanjaStudenta + 1;
+        }
+        if(pritisnuto == "V") {
+            vjezbeStudenta = vjezbeStudenta + 1;
+        }
+        polje.style.background = "green"
+    }
 
-        }else {
-            let main =documnet.getElementById("mainDiv")
+    //parseInt(podaciIzPolja[2]);
+    //parseInt(podaciIzPolja[3]);
+
+    let prisustvo = {sedmica: sedmicaStudenta, predavanja: predavanjaStudenta, vjezbe: vjezbeStudenta};
+    //console.log(predmetStudenta);
+
+    PoziviAjax.postPrisustvo(predmetStudenta, indeksStudenta, prisustvo, function(err, data) {
+        
+        if(err) {
+            console.log(err);
+        } 
+        else {
+            console.log(data);
+            let main = document.getElementById("mainDiv")
             main.innerHTML = ""
-            let podaci =JSON.parse(data);
-            let tabela = TabelaPrisustvo(main, podaci);
-
+            let podaci = JSON.parse(data);
+            let tabela = TabelaPrisustvo(main, data);
         }
     })
 
 }
-this.background
-this.classNam
-dodam id gdje onlick */

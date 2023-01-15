@@ -114,14 +114,60 @@ app.get('/predmet/:naziv', function(req, res) {
             if(unesenaPrisustva[i]["predmet"] == uneseniPredmet) {
                 res.status(200).json(unesenaPrisustva[i]);
             }
-
         }
-        
     });
 });
 
-app.post('/prisustvo/predmet/:naziv/student/:index', function(err, data) {
+app.post('/prisustvo/predmet/:naziv/student/:index', function(req, res) {
+    const uneseniPredmet = req.params.naziv;
+    const uneseniIndex = req.params.index;
+    //console.log(req.body)
+    let sedmica = req.body["sedmica"];
+    let predavanja = req.body["predavanja"];
+    let vjezbe = req.body["vjezbe"];
+ 
+    let fileData = fs.readFileSync('data/prisustva.json', 'utf8')
+    const jsonData = JSON.parse(fileData)
 
+    //console.log(fileData);
+    //console.log(jsonData); nije json
+
+    for(let i = 0; i < jsonData.length; i++) {
+        if(jsonData[i]["predmet"] == uneseniPredmet) {
+            for(let j = 0; j < jsonData[i]["prisustva"].length; j++) {
+                if(jsonData[i]["prisustva"][j]["index"] == uneseniIndex && jsonData[i]["prisustva"][j]["sedmica"] == sedmica) {
+                    jsonData[i]["prisustva"][j]["predavanja"] = predavanja;
+                    jsonData[i]["prisustva"][j]["vjezbe"] = vjezbe;
+                }
+            }
+        }
+        break;
+    }
+
+
+    fs.writeFile('data/prisustva.json', JSON.stringify(jsonData), function (err) {
+        if (err) {
+            return console.error(err);
+        }
+       res.status(200).json(jsonData);
+    });
+    
+
+/*
+    fs.writeFile('data/prisustva.json', 'utf8', function(err, data) {
+        const unesenaPrisustva= JSON.parse(data);
+
+        
+        let prisustvaZaStudentaSaIndexom = "";
+       
+        for(let i = 0; i < unesenaPrisustva.length; i++) {
+            if(unesenaPrisustva[i]["predmet"] == uneseniPredmet) {
+                
+            }
+        }
+    });
+*/
+  
 });
 
 
