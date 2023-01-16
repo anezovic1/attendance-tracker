@@ -84,7 +84,7 @@ app.post('/logout', function(req, res) {
     res.json({ poruka: 'Log out pritisnut!' });
 });
 
-/* Ruta koja omogućava ispis poruke, ukoliko nastavnik nije loginovan ili prikaz predmeta ukoliko je loginova. */
+/* Ruta koja omogućava ispis poruke, ukoliko nastavnik nije loginovan ili prikaz predmeta ukoliko je loginovan. */
 
 app.get('/predmeti.html', function(req, res) {
     if(session != null) {
@@ -106,16 +106,21 @@ app.get('/predmeti', function(req, res) {
 
 app.get('/predmet/:naziv', function(req, res) {
 
-    fs.readFile('data/prisustva.json', 'utf8', function(err, data) {
-        const unesenaPrisustva= JSON.parse(data);
-        const uneseniPredmet = req.params.naziv;
-
-        for(let i = 0; i < unesenaPrisustva.length; i++) {
-            if(unesenaPrisustva[i]["predmet"] == uneseniPredmet) {
-                res.status(200).json(unesenaPrisustva[i]);
+    if(session != null && session.username) {
+        fs.readFile('data/prisustva.json', 'utf8', function(err, data) {
+            const unesenaPrisustva= JSON.parse(data);
+            const uneseniPredmet = req.params.naziv;
+    
+            for(let i = 0; i < unesenaPrisustva.length; i++) {
+                if(unesenaPrisustva[i]["predmet"] == uneseniPredmet) {
+                    res.status(200).json(unesenaPrisustva[i]);
+                }
             }
-        }
-    });
+        });
+    }
+    else {
+        res.status(404).json({ greska: 'Nastavnik nije loginovan' });
+    }
 });
 
 app.post('/prisustvo/predmet/:naziv/student/:index', function(req, res) {
@@ -130,7 +135,8 @@ app.post('/prisustvo/predmet/:naziv/student/:index', function(req, res) {
     const jsonData = JSON.parse(fileData)
 
     //console.log(fileData);
-    //console.log(jsonData); nije json
+    //console.log(jsonData); 
+
     var dodan = 0;
     for(let i = 0; i < jsonData.length; i++) {
         if(jsonData[i]["predmet"] == uneseniPredmet) {
@@ -141,15 +147,13 @@ app.post('/prisustvo/predmet/:naziv/student/:index', function(req, res) {
                     dodan = 1;
                 }
             }
-            //dakle, studentu se tek dodaje prisustvo za tu sedmicu
+
             if(dodan == 0) {
                 var novi = {"sedmica": sedmica, "predavanja": predavanja, "vjezbe": vjezbe, "index": parseInt(uneseniIndex)};
                 jsonData[i]["prisustva"].push(novi);
             }
-            
         }
     }
-
 
     fs.writeFile('data/prisustva.json', JSON.stringify(jsonData), function (err) {
         if (err) {
@@ -157,9 +161,6 @@ app.post('/prisustvo/predmet/:naziv/student/:index', function(req, res) {
         }
         res.status(200).json(jsonData);
     });
-    
-
-  
 });
 
 

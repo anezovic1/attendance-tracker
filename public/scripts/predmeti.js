@@ -58,7 +58,7 @@ function mijenjaBoju(polje) {
     //console.log(pritisnuto);
     //console.log(indeksStudenta);
     //console.log(predmetStudenta);
-    console.log(sedmicaStudenta);
+    //console.log(sedmicaStudenta);
     //console.log(predavanjaStudenta);
     //console.log(vjezbeStudenta);
 
@@ -95,10 +95,8 @@ function mijenjaBoju(polje) {
     //parseInt(podaciIzPolja[3]);
 
     let prisustvo = {sedmica: sedmicaStudenta, predavanja: predavanjaStudenta, vjezbe: vjezbeStudenta};
-    //console.log(predmetStudenta);
 
     PoziviAjax.postPrisustvo(predmetStudenta, indeksStudenta, prisustvo, function(err, data) {
-        
         if(err) {
             console.log(err);
         } 
@@ -115,8 +113,6 @@ function mijenjaBoju(polje) {
                     break;
                 }
             }
-
-            
         }
     });
 

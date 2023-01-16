@@ -79,7 +79,7 @@ const PoziviAjax = (()=>{
         ajax.send(JSON.stringify(prisustvo));
     
     }
-    return{
+    return {
         postLogin: impl_postLogin,
         postLogout: impl_postLogout,
         getPredmet: impl_getPredmet,
