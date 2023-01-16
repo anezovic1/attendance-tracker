@@ -18,17 +18,6 @@
         "predmeti": [
             "PREDMET1"
         ]
-    },
-    {
-        "nastavnik": {
-            "username": "anida",
-            "password_hash": "$2b$10$pCnsIO9rMmbdrRx.L/uImuJPV.phTyAAxYcDFuv7IMd65WDPg1VXi"
-        },
-        "predmeti": [
-            "PREDMET1",
-            "PREDMET2",
-            "PREDMET3"
-        ]
     }
 ]
 
