@@ -26,6 +26,7 @@ app.use(sessions({
 );
 var session;
 
+
 app.get('/predmet.html', function(req, res) {
     res.sendFile(__dirname + '/public/html/predmet.html');
 });
