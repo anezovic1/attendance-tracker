@@ -8,7 +8,6 @@ var port = 3000;
 const app = express();
 const db = require('./db_connection.js');
 
-
 db.sequelize.sync({force: true}).then((res) => {
     console.log('Tabele kreirane');
 }).catch((err) => {

@@ -20,10 +20,10 @@ db.Sequelize = Sequelize;
 db.sequelize = sequelize;
 
 //import modela
-db.student = require(__dirname + '/student.js');
-db.nastavnik = require(__dirname + '/nastavnik.js');
-db.predmet = require(__dirname + '/predmet.js');
-db.prisustvo = require(__dirname + '/prisustvo.js');
+db.student = require(__dirname + '/student.js')(sequelize);
+db.nastavnik = require(__dirname + '/nastavnik.js')(sequelize);
+db.predmet = require(__dirname + '/predmet.js')(sequelize);
+db.prisustvo = require(__dirname + '/prisustvo.js')(sequelize);
 
 
 /*
