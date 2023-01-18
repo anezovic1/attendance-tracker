@@ -25,13 +25,8 @@ db.nastavnik = require(__dirname + '/nastavnik.js')(sequelize);
 db.predmet = require(__dirname + '/predmet.js')(sequelize);
 db.prisustvo = require(__dirname + '/prisustvo.js')(sequelize);
 
-
-/*
 db.nastavnik.hasMany(db.predmet, {as: 'predmetiNastavnici'});
 db.predmet.hasMany(db.student, {as: 'predmetiStudenti'});
-*/
-
-
 
 /*
 //relacije

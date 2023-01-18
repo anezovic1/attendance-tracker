@@ -7,62 +7,57 @@ db.sequelize.sync({force:true}).then(function(){
 });
 
 function inicializacija(){
-    var autor1,autor2;
-    var autoriListaPromisea=[];
-    var knjigeListaPromisea=[];
-    var bibliotekeListaPromisea=[];
-    return new Promise(function(resolve,reject){
-    autoriListaPromisea.push(db.autor.create({ime:'Ivo Andric'}));
-    autoriListaPromisea.push(db.autor.create({ime:'Mak Dizdar'}));
-    Promise.all(autoriListaPromisea).then(function(autori){
-        var andric=autori.filter(function(a){return a.ime==='Ivo Andric'})[0];
-        var dizdar=autori.filter(function(a){return a.ime==='Mak Dizdar'})[0];
+    var nastavniciListaPromisea = [];
+    var predmetiListaPromisea = [];
+    var studentiListaPromisea = [];
 
-        knjigeListaPromisea.push(
-            db.knjiga.create({naziv:'Prokleta avlija',broj:10}).then(function(k){
-                k.setAutori([andric]);
-                return new Promise(function(resolve,reject){resolve(k);});
-            })
-        );
-        knjigeListaPromisea.push(
-            db.knjiga.create({naziv:'Travnicka hronika',broj:4}).then(function(k){
-                k.setAutori([andric]);
-                return new Promise(function(resolve,reject){resolve(k);});
-            })
-        );
-        knjigeListaPromisea.push(
-            db.knjiga.create({naziv:'Kameni spavac',broj:6}).then(function(k){
-                k.setAutori([dizdar]);
-                return new Promise(function(resolve,reject){resolve(k);});
-            })
-        );
-        knjigeListaPromisea.push(
-            db.knjiga.create({naziv:'Zajednicka knjiga',broj:0}).then(function(k){
-                k.setAutori([andric,dizdar]);
-                return new Promise(function(resolve,reject){resolve(k);});
-            })
-        );
-        Promise.all(knjigeListaPromisea).then(function(knjige){
-            var pavlija=knjige.filter(function(k){return k.naziv==='Prokleta avlija'})[0];
-            var thronika=knjige.filter(function(k){return k.naziv==='Travnicka hronika'})[0];
-            var kspavac=knjige.filter(function(k){return k.naziv==='Kameni spavac'})[0];
-            var zknjiga=knjige.filter(function(k){return k.naziv==='Zajednicka knjiga'})[0];
-            bibliotekeListaPromisea.push(
-                db.biblioteka.create({adresa:'Titova 1'}).then(function(b){
-                    return b.setKnjigeBiblioteke([pavlija,thronika]).then(function(){
-                    return new Promise(function(resolve,reject){resolve(b);});
+    return new Promise(function(resolve, reject) {
+
+        predmetiListaPromisea.push(db.predmet.create({naziv: 'PREDMET1'}));
+        predmetiListaPromisea.push(db.predmet.create({naziv: 'PREDMET2'}));
+        predmetiListaPromisea.push(db.predmet.create({naziv: 'PREDMET3'}));
+        predmetiListaPromisea.push(db.predmet.create({naziv: 'PREDMET4'}));
+
+        Promise.all(predmetiListaPromisea).then(function(predmeti) {
+
+            var predmet1 = predmeti.filter(function(p) { return p.naziv === 'PREDMET1' })[0];
+            var predmet2 = predmeti.filter(function(p) { return p.naziv === 'PREDMET2' })[0];
+            var predmet3 = predmeti.filter(function(p) { return p.naziv === 'PREDMET3' })[0];
+            var predmet4 = predmeti.filter(function(p) { return p.naziv === 'PREDMET4' })[0];
+
+            nastavniciListaPromisea.push(
+                db.nastavnik.create({username: 'USERNAME', password: '$2b$10$jQXkLSXBdzETfHDPCcXzWud1jebCQD5AOe6Mbj0wRc4lMhLKl5Yhu'})
+                    .then(function(n) {
+                        return n.setPredmetiNastavnici([predmet1, predmet2, predmet3]).then(function() {
+                            return new Promise(function(resolve, reject) { 
+                                resolve(n);
+                            }
+                        );
                     });
                 })
             );
-            bibliotekeListaPromisea.push(
-                db.biblioteka.create({adresa:'Zmaja od Bosne bb'}).then(function(b){
-                    return b.setKnjigeBiblioteke([kspavac,zknjiga]).then(function(){
-                    return new Promise(function(resolve,reject){resolve(b);});
+
+            nastavniciListaPromisea.push(
+                db.nastavnik.create({username: 'USERNAME2', password: '$2b$10$o8YlyozWKFjh9fOQuewEaOcniaKYOWvQwyBlSqyedAOYstX10Nipy'})
+                    .then(function(n) {
+                        return n.setPredmetiNastavnici([predmet4]).then(function() {
+                            return new Promise(function(resolve, reject) { 
+                                resolve(n);
+                            }
+                        );
                     });
                 })
             );
-            Promise.all(bibliotekeListaPromisea).then(function(b){resolve(b);}).catch(function(err){console.log("Biblioteke greska "+err);});
-        }).catch(function(err){console.log("Knjige greska "+err);});
-    }).catch(function(err){console.log("Autori greska "+err);});   
+
+            Promise.all(nastavniciListaPromisea).then(function(n) {
+                resolve(n);
+            }).catch(function(err) {
+                console.log("Nastavnici greska " + err);
+            });
+
+        }).catch(function(err) {
+            console.log("Predmeti greska " + err);
+        });
+
     });
 }

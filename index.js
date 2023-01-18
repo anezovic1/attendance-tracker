@@ -8,12 +8,13 @@ var port = 3000;
 const app = express();
 const db = require('./db_connection.js');
 
+/*
 db.sequelize.sync({force: true}).then((res) => {
     console.log('Tabele kreirane');
 }).catch((err) => {
     console.log(err);
 });
-
+*/
 
 
 app.use(express.static("public"));
@@ -47,39 +48,51 @@ app.get('/login', function(req, res) {
 
 app.post('/login', function(req, res) {
     let returnMessage = {'poruka': ''};
+    var password = req.body.password;
+    
+    db.nastavnik.findOne({
+        where: {
+            username: req.body.username
+        }
+    }).then(function(pronadjeniNastavnik) {
+        if (!pronadjeniNastavnik) {
+            returnMessage["poruka"] = 'Neuspješna prijava';
+            res.status(404).json(returnMessage);
+        }
+        else {
+            var hashPass = pronadjeniNastavnik.password;
+            let postoji;
+            let predmetiNastavnika = [];
+            
+            async function provjeriPassword() {
+                postoji = await bcrypt.compare(password, hashPass); 
 
-    fs.readFile('data/nastavnici.json', 'utf8', function(err, data) {
-        if (err) console.error(err);
-        const uneseniNastavnici = JSON.parse(data);
-        var postoji = 0;
-
-        var password = req.body.password;
-       
-        for(let i = 0; i < uneseniNastavnici.length; i++) {
-            /* Kako je password u nastavnici.json vec hashiran, ne trebam ga hashirati. */
-
-            var hashPass = uneseniNastavnici[i]["nastavnik"]["password_hash"];
-
-            //console.log("Iz nastavnici " + hashPass + " i uneseni hashirani " + password)
-
-            if(uneseniNastavnici[i]["nastavnik"]["username"] == req.body.username) {
-                bcrypt.compare(password, hashPass, function(err, check) {
-                    
-                    if (check) {
-                        session = req.session;
-                        session.username = req.body.username;
-                        session.predmeti = uneseniNastavnici[i]["predmeti"];
-                        returnMessage["poruka"] = 'Uspješna prijava';
-                        res.status(200).json(returnMessage);
-                    } 
-                    else {
-                        session = null;
-                        returnMessage["poruka"] = 'Neuspješna prijava';
-                        //console.log(returnMessage);
-                        res.status(404).json(returnMessage);
+                await db.predmet.findAll({
+                    where: {
+                        nastavnikId: pronadjeniNastavnik.id
                     }
-                });  
+                }).then(function(predmeti) {
+                    predmeti.forEach(predmet => {
+                        predmetiNastavnika.push(predmet.naziv);
+                    });
+                });
+                //console.log('Predmeti:' + predmetiNastavnika);
+
+                if(postoji) {
+                    session = req.session;
+                    session.username = req.body.username;
+                    session.predmeti = predmetiNastavnika;
+                    returnMessage["poruka"] = 'Uspješna prijava';
+                    res.status(200).json(returnMessage);
+                }
+                else {
+                    session = null;
+                    returnMessage["poruka"] = 'Neuspješna prijava';
+                    res.status(404).json(returnMessage);
+                }
             }
+            
+            provjeriPassword();
         }
     });
 });
