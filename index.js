@@ -4,11 +4,18 @@ const sessions = require('express-session');
 const fs = require('fs');
 const bcrypt = require('bcrypt');
 const path = require('path');
-//const { nextTick } = require('process');
-
 var port = 3000;
-
 const app = express();
+const db = require('./db_connection.js');
+
+
+db.sequelize.sync({force: true}).then((res) => {
+    console.log('Tabele kreirane');
+}).catch((err) => {
+    console.log(err);
+});
+
+
 
 app.use(express.static("public"));
 app.use(express.static(path.join(__dirname+'/public/css')));
