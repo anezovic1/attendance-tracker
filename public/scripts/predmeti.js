@@ -4,9 +4,10 @@ window.onload = function() {
             //let poruka = JSON.parse(error);
             document.body.innerHTML="";
             document.body.appendChild(document.createTextNode("Greška! Morate se prijaviti da biste vidjeli predmete."));
+            console.log(JSON.parse(error));
         } 
         else {
-           // console.log(data);
+           // console.log("OVO SU DOBIJENI PODACI" + data);
             const predmeti = JSON.parse(data);
             const predmetiDiv = document.getElementById("listaPredmeta");
 
@@ -35,10 +36,12 @@ function logoutClick() {
 
 function otvoriTabelu(nazivPredmeta) {
     PoziviAjax.getPredmet(nazivPredmeta, function(err, data) {
+        
         if(err){
             console.log(err);
         } 
         else {
+            console.log("OVO SU DOBIJENI PODACI" + data);
             let podaci = JSON.parse(data);
             let divRef = document.getElementById("mainDiv");
             let tabela = TabelaPrisustvo(divRef, podaci);

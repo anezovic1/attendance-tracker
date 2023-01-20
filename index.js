@@ -7,6 +7,7 @@ const path = require('path');
 var port = 3000;
 const app = express();
 const db = require('./db_connection.js');
+const { Op } = require('sequelize');
 
 /*
 db.sequelize.sync({force: true}).then((res) => {
@@ -124,19 +125,84 @@ app.get('/predmeti', function(req, res) {
     }
 });
 
-app.get('/predmet/:naziv', function(req, res) {
-
-    if(session != null && session.username) {
-        fs.readFile('data/prisustva.json', 'utf8', function(err, data) {
-            const unesenaPrisustva= JSON.parse(data);
-            const uneseniPredmet = req.params.naziv;
+app.get('/predmet/:naziv', async function(req, res) {
     
-            for(let i = 0; i < unesenaPrisustva.length; i++) {
-                if(unesenaPrisustva[i]["predmet"] == uneseniPredmet) {
-                    res.status(200).json(unesenaPrisustva[i]);
-                }
+    if(session != null && session.username) {
+        const uneseniPredmet = req.params.naziv;
+        var returnObject = {'studenti': '', 'prisustva': '', 'predmet': '', 'brojPredavanjaSedmicno': '', 'brojVjezbiSedmicno': ''};
+        var idPredmeta;
+
+        await db.predmet.findOne({
+            where: {
+                naziv: uneseniPredmet
             }
+        }).then(function(pronadjeniPredmet) {
+            returnObject["predmet"] = pronadjeniPredmet.naziv;
+            returnObject["brojPredavanjaSedmicno"] = pronadjeniPredmet.brojPredavanjaSedmicno;
+            returnObject["brojVjezbiSedmicno"] = pronadjeniPredmet.brojVjezbiSedmicno;
+            idPredmeta = pronadjeniPredmet.id;
         });
+
+        if(!idPredmeta) {
+            res.status(404).json({ poruka: 'Predmet ne postoji u bazi!' });
+        }
+        else {
+            var studentiNaPredmetu = [];
+            var prisustvaStudenta = [];
+            var idStudenata = [];
+    
+
+            await db.student.findAll({
+                where: {
+                    predmetId: idPredmeta
+                }
+            }).then(function(pronadjeniStudenti) {
+                
+                pronadjeniStudenti.forEach(student => {
+                    var studentObject = {ime: '', index: ''};
+                    
+                    studentObject["ime"] = student.ime;
+                    studentObject["index"] = student.index;
+                    studentiNaPredmetu.push(studentObject);
+                    idStudenata.push(student.id);
+
+                });
+            })
+
+            if(idStudenata) {
+                //console.log(studentiNaPredmetu); STUDENTI DOBRO UPISANI
+                returnObject["studenti"] = studentiNaPredmetu; 
+                //console.log(returnObject["studenti"]);
+                //console.log(idStudenata);
+
+                await db.prisustvo.findAll({
+                    where: {
+                        studentId: {
+                            [Op.or]:[idStudenata]
+                        }
+                    }
+                }).then(function(pronadjenaPrisustva) {
+
+                    pronadjenaPrisustva.forEach(prisustvo => {
+                        var prisustvoObject = {sedmica: '', predavanja: '', vjezbe: '', index: ''};
+                        
+                        prisustvoObject["sedmica"] = prisustvo.sedmica;
+                        prisustvoObject["predavanja"] = prisustvo.predavanja;
+                        prisustvoObject["vjezbe"] = prisustvo.vjezbe;
+                        prisustvoObject["index"] = prisustvo.index;
+                        prisustvaStudenta.push(prisustvoObject);
+                    
+                    });
+                });
+
+                returnObject["prisustva"] = prisustvaStudenta;
+                
+                res.status(200).json(returnObject);
+            }
+            else {
+                res.status(404).json({ poruka: 'Na ovom predmetu trenutno nema studenata!' });
+            }
+        }
     }
     else {
         res.status(404).json({ greska: 'Nastavnik nije loginovan' });
@@ -146,19 +212,72 @@ app.get('/predmet/:naziv', function(req, res) {
 app.post('/prisustvo/predmet/:naziv/student/:index', function(req, res) {
     const uneseniPredmet = req.params.naziv;
     const uneseniIndex = req.params.index;
-    //console.log(req.body)
-    let sedmica = req.body["sedmica"];
-    let predavanja = req.body["predavanja"];
-    let vjezbe = req.body["vjezbe"];
- 
+
+    let unesenaSedmica = req.body["sedmica"];
+    let unesenoPredavanja = req.body["predavanja"];
+    let uneseneVjezbe = req.body["vjezbe"];
+    var dodan = 0;
+
     let fileData = fs.readFileSync('data/prisustva.json', 'utf8')
     const jsonData = JSON.parse(fileData)
 
-    //console.log(fileData);
-    //console.log(jsonData); 
+    
+    //console.log("jsondata" + jsonData[0]['studenti']); [object Object],[object Object]
 
-    var dodan = 0;
-    for(let i = 0; i < jsonData.length; i++) {
+    /*db.predmet.findOne({
+        where: {
+            naziv: uneseniPredmet
+        }
+    }).then(function(pronadjeniPredmet) {
+        console.log('pronasao predmet:' + pronadjeniPredmet.naziv)
+
+        if(pronadjeniPredmet) {
+            db.student.findAll({
+                where: {
+                    predmetId: pronadjeniPredmet.id,
+                    index: uneseniIndex
+                }
+            }).then(function(pronadjeniStudent) {
+                console.log('pronasao studenta:' + pronadjeniStudent.ime)
+
+                db.prisustvo.findOne({
+                    where: {
+                        studentId: pronadjeniStudent.id,
+                        sedmica: unesenaSedmica
+                    }
+                }).then(function(pronadjenoPrisustvo) {
+                    console.log('pronasao prisustvo:' + pronadjenoPrisustvo.studentId)
+
+                    db.prisustvo.update(
+                        { predavanja: unesenoPredavanja, vjezbe: uneseneVjezbe },
+                        { where: { id: pronadjenoPrisustvo.id } }
+                    );
+                });
+
+                
+                //ovdje dodajem prisustvo za tog studenta, dodajem element u tabelu prisustvo
+
+                db.student.create(
+                    { ime: 'Novi', index: '4242' },
+                );
+
+            });
+
+           //if(dodan == 0) {
+             //   var novi = {"sedmica": sedmica, "predavanja": predavanja, "vjezbe": vjezbe, "index": parseInt(uneseniIndex)};
+             //   jsonData[i]["prisustva"].push(novi);
+           // }
+        }
+    });
+    */
+
+
+
+
+
+
+   
+    /*for(let i = 0; i < jsonData.length; i++) {
         if(jsonData[i]["predmet"] == uneseniPredmet) {
             for(let j = 0; j < jsonData[i]["prisustva"].length; j++) {
                 if(jsonData[i]["prisustva"][j]["index"] == uneseniIndex && jsonData[i]["prisustva"][j]["sedmica"] == sedmica) {
@@ -180,7 +299,8 @@ app.post('/prisustvo/predmet/:naziv/student/:index', function(req, res) {
             return console.error(err);
         }
         res.status(200).json(jsonData);
-    });
+    });*/
+
 });
 
 

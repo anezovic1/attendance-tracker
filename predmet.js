@@ -2,7 +2,9 @@ const Sequelize = require("sequelize");
 
 module.exports = function(sequelize,DataTypes) {
     const Predmet = sequelize.define("predmet", {
-        naziv:Sequelize.STRING
+        naziv: Sequelize.STRING,
+        brojPredavanjaSedmicno: Sequelize.INTEGER,
+        brojVjezbiSedmicno: Sequelize.INTEGER
     });
     return Predmet;
 };
