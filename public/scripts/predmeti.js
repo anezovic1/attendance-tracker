@@ -41,7 +41,7 @@ function otvoriTabelu(nazivPredmeta) {
             console.log(err);
         } 
         else {
-            console.log("OVO SU DOBIJENI PODACI" + data);
+            //console.log("OVO SU DOBIJENI PODACI" + data);
             let podaci = JSON.parse(data);
             let divRef = document.getElementById("mainDiv");
             let tabela = TabelaPrisustvo(divRef, podaci);
@@ -59,11 +59,6 @@ function mijenjaBoju(polje) {
     let vjezbeStudenta = parseInt(podaciIzPolja[5]);
 
     //console.log(pritisnuto);
-    //console.log(indeksStudenta);
-    //console.log(predmetStudenta);
-    //console.log(sedmicaStudenta);
-    //console.log(predavanjaStudenta);
-    //console.log(vjezbeStudenta);
 
     if(polje.style.background == "red") {
         if(pritisnuto == "P") {
@@ -93,10 +88,6 @@ function mijenjaBoju(polje) {
         polje.style.background = "green"
     }
 
-
-    //parseInt(podaciIzPolja[2]);
-    //parseInt(podaciIzPolja[3]);
-
     let prisustvo = {sedmica: sedmicaStudenta, predavanja: predavanjaStudenta, vjezbe: vjezbeStudenta};
 
     PoziviAjax.postPrisustvo(predmetStudenta, indeksStudenta, prisustvo, function(err, data) {
@@ -104,18 +95,15 @@ function mijenjaBoju(polje) {
             console.log(err);
         } 
         else {
-            //console.log("poadaci " + data);
+            //console.log("podaci " + data);
             let main = document.getElementById("mainDiv")
             main.innerHTML = ""
             let podaci = JSON.parse(data);
 
-            for(let i = 0; i < podaci.length; i++) {
-                if(podaci[i]["predmet"] == predmetStudenta) {
-                    console.log(podaci[i]["predmet"]);
-                    let tabela = TabelaPrisustvo(main, podaci[i]);
-                    break;
-                }
+            if(predmetStudenta == podaci.predmet) {
+                let tabela = TabelaPrisustvo(main, podaci);
             }
+
         }
     });
 

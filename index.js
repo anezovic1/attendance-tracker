@@ -8,15 +8,7 @@ var port = 3000;
 const app = express();
 const db = require('./db_connection.js');
 const { Op } = require('sequelize');
-
-/*
-db.sequelize.sync({force: true}).then((res) => {
-    console.log('Tabele kreirane');
-}).catch((err) => {
-    console.log(err);
-});
-*/
-
+const { prisustvo } = require('./db_connection.js');
 
 app.use(express.static("public"));
 app.use(express.static(path.join(__dirname+'/public/css')));
@@ -209,98 +201,116 @@ app.get('/predmet/:naziv', async function(req, res) {
     }
 });
 
-app.post('/prisustvo/predmet/:naziv/student/:index', function(req, res) {
+
+app.post('/prisustvo/predmet/:naziv/student/:index', async function(req, res) {
     const uneseniPredmet = req.params.naziv;
     const uneseniIndex = req.params.index;
 
     let unesenaSedmica = req.body["sedmica"];
     let unesenoPredavanja = req.body["predavanja"];
     let uneseneVjezbe = req.body["vjezbe"];
-    var dodan = 0;
 
-    let fileData = fs.readFileSync('data/prisustva.json', 'utf8')
-    const jsonData = JSON.parse(fileData)
+    var returnObject = {'studenti': '', 'prisustva': '', 'predmet': '', 'brojPredavanjaSedmicno': '', 'brojVjezbiSedmicno': ''};
 
-    
-    //console.log("jsondata" + jsonData[0]['studenti']); [object Object],[object Object]
+    var idPredmeta = 0;
 
-    /*db.predmet.findOne({
+    await db.predmet.findOne({
         where: {
             naziv: uneseniPredmet
         }
     }).then(function(pronadjeniPredmet) {
-        console.log('pronasao predmet:' + pronadjeniPredmet.naziv)
+        returnObject["predmet"] = pronadjeniPredmet.naziv;
+        returnObject["brojPredavanjaSedmicno"] = pronadjeniPredmet.brojPredavanjaSedmicno;
+        returnObject["brojVjezbiSedmicno"] = pronadjeniPredmet.brojVjezbiSedmicno;
+        idPredmeta = pronadjeniPredmet.id;
+    });
 
-        if(pronadjeniPredmet) {
-            db.student.findAll({
-                where: {
-                    predmetId: pronadjeniPredmet.id,
-                    index: uneseniIndex
-                }
-            }).then(function(pronadjeniStudent) {
-                console.log('pronasao studenta:' + pronadjeniStudent.ime)
+    if(!idPredmeta) {
+        res.status(404).json({ poruka: 'Predmet ne postoji u bazi!' });
+    }
+    else {
+        var idStudenata = [];
+        var studentiNaPredmetu = [];
+        var prisustvaStudenta = [];
+        var trazeniStudent;
 
-                db.prisustvo.findOne({
-                    where: {
-                        studentId: pronadjeniStudent.id,
-                        sedmica: unesenaSedmica
-                    }
-                }).then(function(pronadjenoPrisustvo) {
-                    console.log('pronasao prisustvo:' + pronadjenoPrisustvo.studentId)
-
-                    db.prisustvo.update(
-                        { predavanja: unesenoPredavanja, vjezbe: uneseneVjezbe },
-                        { where: { id: pronadjenoPrisustvo.id } }
-                    );
-                });
-
+        await db.student.findAll({
+            where: {
+                predmetId: idPredmeta
+            }
+        }).then(function(pronadjeniStudenti) {
+            
+            pronadjeniStudenti.forEach(student => {
+                var studentObject = {ime: '', index: ''};
                 
-                //ovdje dodajem prisustvo za tog studenta, dodajem element u tabelu prisustvo
-
-                db.student.create(
-                    { ime: 'Novi', index: '4242' },
-                );
+                studentObject["ime"] = student.ime;
+                studentObject["index"] = student.index;
+                studentiNaPredmetu.push(studentObject);
+                idStudenata.push(student.id);
 
             });
+        })
 
-           //if(dodan == 0) {
-             //   var novi = {"sedmica": sedmica, "predavanja": predavanja, "vjezbe": vjezbe, "index": parseInt(uneseniIndex)};
-             //   jsonData[i]["prisustva"].push(novi);
-           // }
-        }
-    });
-    */
+        await db.student.findOne({
+            where: {
+                index: uneseniIndex
+            }
+        }).then(function(pronadjeniStudent) {
+            trazeniStudent = pronadjeniStudent.id;
+        });
 
+        if(trazeniStudent) {
+            returnObject["studenti"] = studentiNaPredmetu;
 
+            var idPrisustvo = 0;
 
-
-
-
-   
-    /*for(let i = 0; i < jsonData.length; i++) {
-        if(jsonData[i]["predmet"] == uneseniPredmet) {
-            for(let j = 0; j < jsonData[i]["prisustva"].length; j++) {
-                if(jsonData[i]["prisustva"][j]["index"] == uneseniIndex && jsonData[i]["prisustva"][j]["sedmica"] == sedmica) {
-                    jsonData[i]["prisustva"][j]["predavanja"] = predavanja;
-                    jsonData[i]["prisustva"][j]["vjezbe"] = vjezbe;
-                    dodan = 1;
+            await db.prisustvo.findOne({
+                where: {
+                    index: uneseniIndex,
+                    sedmica: unesenaSedmica
                 }
+            }).then(function(pronadjenoPrisustvo) {
+                idPrisustvo = pronadjenoPrisustvo.id;
+            });
+                
+            if(idPrisustvo) {
+                await db.prisustvo.update(
+                    { predavanja: unesenoPredavanja, vjezbe: uneseneVjezbe },
+                    { where: { id: idPrisustvo } }
+                ); 
+            }
+            else {
+                await db.prisustvo.create(
+                    { sedmica: unesenaSedmica, predavanja: unesenoPredavanja, vjezbe: uneseneVjezbe, index: uneseniIndex},
+                );
             }
 
-            if(dodan == 0) {
-                var novi = {"sedmica": sedmica, "predavanja": predavanja, "vjezbe": vjezbe, "index": parseInt(uneseniIndex)};
-                jsonData[i]["prisustva"].push(novi);
-            }
+            await db.prisustvo.findAll({
+                where: {
+                    studentId: {
+                        [Op.or]:[idStudenata]
+                    }
+                }
+            }).then(function(pronadjenaPrisustva) {
+
+                pronadjenaPrisustva.forEach(prisustvo => {
+                    var prisustvoObject = {sedmica: '', predavanja: '', vjezbe: '', index: ''};
+                    prisustvoObject["sedmica"] = prisustvo.sedmica;
+                    prisustvoObject["predavanja"] = prisustvo.predavanja;
+                    prisustvoObject["vjezbe"] = prisustvo.vjezbe;
+                    prisustvoObject["index"] = prisustvo.index;
+                    prisustvaStudenta.push(prisustvoObject);
+                });
+            });
+
+            returnObject["prisustva"] = prisustvaStudenta;
+            
+            res.status(200).json(returnObject);
+        }
+        else {
+            res.status(404).json({ poruka: 'Traženi student ne postoji u bazi!' });
         }
     }
-
-    fs.writeFile('data/prisustva.json', JSON.stringify(jsonData), function (err) {
-        if (err) {
-            return console.error(err);
-        }
-        res.status(200).json(jsonData);
-    });*/
-
 });
 
 
