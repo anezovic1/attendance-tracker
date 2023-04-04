@@ -4,7 +4,7 @@ services:
 
   #docker run --name mysql-db --network arm-mreza -e MYSQL_ROOT_PASSWORD=root -e MYSQL_DATABASE=DBWT19
   mysql-db:
-    image: mysql:latest
+    image: mysql:5-debian
     container_name: mysql-db
     networks:
       - arm-zadaca
@@ -19,7 +19,7 @@ services:
     image: nodejs-app:v1.0
     container_name: nodejs-app
     ports:
-      - "8080:8080"
+      - 3000:3000
     networks:
       - arm-zadaca
     depends_on:
@@ -27,7 +27,7 @@ services:
     deploy:
       restart_policy:
         condition: on-failure
-        max_attempts: 3
+        max_attempts: 10
 
 networks:
   arm-zadaca:
