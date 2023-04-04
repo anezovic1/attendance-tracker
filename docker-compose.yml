@@ -7,10 +7,10 @@ services:
     image: mysql:latest
     container_name: mysql-db
     networks:
-      - arm-mreza
+      - arm-zadaca
     environment:
-      - MYSQL_ROOT_PASSWORD=root
-      - MYSQL_DATABASE=DBWT19
+      - MYSQL_ROOT_PASSWORD=password
+      - MYSQL_DATABASE=wt22
   
   #docker build -t nodejs-app:v1.0 .
   #docker run -p 8080:8080 --network arm-mreza --name nodejs-app nodejs-app:v1.0
@@ -21,7 +21,7 @@ services:
     ports:
       - "8080:8080"
     networks:
-      - arm-mreza
+      - arm-zadaca
     depends_on:
       - mysql-db
     deploy:
@@ -30,6 +30,6 @@ services:
         max_attempts: 3
 
 networks:
-  arm-mreza:
-    name: arm-mreza
+  arm-zadaca:
+    name: arm-zadaca
     driver: bridge
