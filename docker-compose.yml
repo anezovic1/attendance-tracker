@@ -1,0 +1,35 @@
+version: '2'
+# ne koristiti tab
+services:
+
+  #docker run --name mysql-db --network arm-mreza -e MYSQL_ROOT_PASSWORD=root -e MYSQL_DATABASE=DBWT19
+  mysql-db:
+    image: mysql:latest
+    container_name: mysql-db
+    networks:
+      - arm-mreza
+    environment:
+      - MYSQL_ROOT_PASSWORD=root
+      - MYSQL_DATABASE=DBWT19
+  
+  #docker build -t nodejs-app:v1.0 .
+  #docker run -p 8080:8080 --network arm-mreza --name nodejs-app nodejs-app:v1.0
+  nodejs-app:
+    build: .
+    image: nodejs-app:v1.0
+    container_name: nodejs-app
+    ports:
+      - "8080:8080"
+    networks:
+      - arm-mreza
+    depends_on:
+      - mysql-db
+    deploy:
+      restart_policy:
+        condition: on-failure
+        max_attempts: 3
+
+networks:
+  arm-mreza:
+    name: arm-mreza
+    driver: bridge

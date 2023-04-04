@@ -1,6 +1,6 @@
 const Sequelize = require("sequelize");
 const sequelize = new Sequelize("wt22", "root", "password",{ 
-    host: "localhost",
+    host: "mysql-db", //localhost
     dialect: "mysql",
     logging: false,
     port: 3306,
