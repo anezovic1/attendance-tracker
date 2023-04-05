@@ -1,0 +1,33 @@
+version: '2'
+
+services:
+
+  mysql-db:
+    image: mysql:5-debian
+    container_name: mysql-db
+    networks:
+      - arm-zadaca
+    environment:
+      - MYSQL_ROOT_PASSWORD=password
+      - MYSQL_DATABASE=wt22
+  
+
+  nodejs-app:
+    build: .
+    image: anezovic1/arm-zadaca:nodejs-app
+    container_name: nodejs-app
+    ports:
+      - 3000:3000
+    networks:
+      - arm-zadaca
+    depends_on:
+      - mysql-db
+    deploy:
+      restart_policy:
+        condition: on-failure
+        max_attempts: 10
+
+networks:
+  arm-zadaca:
+    name: arm-zadaca
+    driver: bridge
