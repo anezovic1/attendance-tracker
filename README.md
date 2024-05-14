@@ -41,3 +41,11 @@ This project was done as part of the _Web Technologies_ course and is the first 
 
 <img src="gif/res-2.png" alt="search" width="700">
 <img src="gif/res-3.png" alt="search" width="300">
+
+## How to run the App?
+
+```
+npm install
+node pripremaBaze.js
+node index.js
+```
