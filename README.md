@@ -19,7 +19,7 @@ This project was done as part of the _Web Technologies_ course and is the first 
 
 ### Login form for registered professors
 
-- The application does not offer a registration option; instead, it assumes that there are registered professors who have the ability to log in. For logging in, the following data is used: (username) and (password).
+- The application does not offer a registration option; instead, it assumes that there are registered professors who have the ability to log in. For logging in, the following data is used: USERNAME (username) and PASSWORDHASH (password).
 
 <img src="gif/login.png" alt="search" width="700">
 
