@@ -1,6 +1,6 @@
 # Project Description
 
-This project was done as part of the _Web Technologies_ course and is the first application I've created.
+This project was done as part of the _Web Technologies_ course and is the first web application I've created.
 
 ## Technologies
 
@@ -11,21 +11,31 @@ This project was done as part of the _Web Technologies_ course and is the first 
 
 ## Functionality
 
-- A list of all courses by major that can be found on the website.
+### The list of all courses
+
+- It's a feature that shows all the courses available on the website, sorted by the subjects or majors they belong to. So, if you're looking for courses in a specific subject area, you can find them all listed in one place.
 
 <img src="gif/res-1.png" alt="search" width="700">
 
-- Log in for registered professors
+### Login form for registered professors
+
+- The application does not offer a registration option; instead, it assumes that there are registered professors who have the ability to log in. For logging in, the following data is used: (username) and (password).
 
 <img src="gif/login.png" alt="search" width="700">
 
-- Every professor can see the student attendance table for all of his subjects
+### Attendance table
+
+- Every professor can see the student attendance table for all of his subjects. This table is such that if a student was present, the field is colored in green, and if the student was absent, the field is colored in red.
 
 <img src="gif/PREDMET-1.png" alt="search" width="700">
 
-- Professors can also change student attendance by clicking on the appropriate table cell
+### Attendance modification
+
+- Professors can also change student attendance by clicking on the appropriate table cell.
 
 <img src="gif/PREDMET-1-1.png" alt="search" width="700">
+
+### Responsiveness
 
 - The website is responsive.
 
